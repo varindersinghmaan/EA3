@@ -8,11 +8,11 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.pstcl.ea.model.entity.DailyTransaction;
-import org.pstcl.ea.model.entity.FileMaster;
-import org.pstcl.ea.model.entity.Transaction;
-import org.pstcl.ea.model.mapping.LocationMFMap;
-import org.pstcl.ea.model.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.FileMaster;
+import org.pstcl.ea.entity.Transaction;
+import org.pstcl.ea.entity.mapping.LocationMFMap;
+import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
 
@@ -29,6 +29,8 @@ public class CalculationMappingUtil {
 		setDailyTxnLocationMF( locationEMFList, dailyTransaction);
 	}
 	public void setDailyTxnLocation(List<MeterLocationMap> mtrLocMapList,   DailyTransaction dailyTransaction) {
+		dailyTransaction.setLocation(null);
+		dailyTransaction.setMeterLocationMap(null);
 
 		if (null!= mtrLocMapList)
 		{
@@ -62,8 +64,11 @@ public class CalculationMappingUtil {
 
 
 	public void setDailyTxnLocationMF( List<LocationMFMap> locationEMFList,  DailyTransaction dailyTransaction) {
-
-
+	
+		dailyTransaction.setExternalMFMap(null);
+		dailyTransaction.setExternalMF(null);
+		dailyTransaction.setNetWHSign(null);
+	
 		if(null!=dailyTransaction.getLocation())
 		{
 
@@ -104,11 +109,18 @@ public class CalculationMappingUtil {
 			}
 
 		}
+		
 
 
 	}
 
 	public DailyTransaction calculateImportExport(DailyTransaction dailyTransaction) {
+		
+		dailyTransaction.setExportBoundaryPtMWH(null);
+		dailyTransaction.setImportBoundaryPtMWH(null);
+		dailyTransaction.setBoundaryPtImportExportDifferenceMWH(null);
+		dailyTransaction.setNetMWH(null);
+		
 		BigDecimal emf=dailyTransaction.getExternalMF();
 
 		if (null != dailyTransaction.getExportWHF() && null != dailyTransaction.getImportWHF()
@@ -166,6 +178,10 @@ public class CalculationMappingUtil {
 
 	public void setTransactionLocationFromMeter(List<MeterLocationMap> mtrLocMapList,   Transaction eaTransaction) {
 
+		eaTransaction.setLocation(null);
+		eaTransaction.setMeterLocationMap(null);
+
+		
 		if (null!= mtrLocMapList)
 		{
 			if( mtrLocMapList.size()==1)
@@ -197,6 +213,8 @@ public class CalculationMappingUtil {
 	}
 	public void setFileLocationFromMeter(List<MeterLocationMap> mtrLocMapList,   FileMaster fileMaster) {
 
+		fileMaster.setLocation(null);
+		
 		if (null!= mtrLocMapList)
 		{
 			if( mtrLocMapList.size()==1)

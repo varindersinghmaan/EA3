@@ -13,12 +13,12 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.entity.EAUser;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.MeterMaster;
+import org.pstcl.ea.entity.SubstationMaster;
+import org.pstcl.ea.entity.mapping.MeterLocationMap;
 import org.pstcl.ea.model.EAFilter;
-import org.pstcl.ea.model.entity.EAUser;
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.entity.MeterMaster;
-import org.pstcl.ea.model.entity.SubstationMaster;
-import org.pstcl.ea.model.mapping.MeterLocationMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Repository("meterLocationMapRepository")
-@Transactional(value="sldcTxnManager")
 public class MeterLocationMapDaoImp implements MeterLocationMapDao {
 	//map
 	@Transactional(value="sldcTxnManager")
@@ -99,6 +98,7 @@ public class MeterLocationMapDaoImp implements MeterLocationMapDao {
 	}
 
 	@Override
+	@Transactional(value="sldcTxnManager")
 	public void save(MeterLocationMap txn,EAUser user) {
 		Session session=sessionFactory.openSession();
 		Transaction transaction=session.beginTransaction();
@@ -213,6 +213,7 @@ public class MeterLocationMapDaoImp implements MeterLocationMapDao {
 
 
 	@Override
+	@Transactional(value="sldcTxnManager")
 	public List<MeterLocationMap> findMeterLocationMapBySubstation(EAFilter entity) {
 		Criteria critLocationList = getSession().createCriteria(LocationMaster.class);
 		if(null!=entity)

@@ -2,7 +2,7 @@ package org.pstcl.ea.model;
 
 import java.util.List;
 
-import org.pstcl.ea.model.entity.LocationMaster;
+import org.pstcl.ea.entity.LocationMaster;
 
 public class MapLossReportLocationModel {
 

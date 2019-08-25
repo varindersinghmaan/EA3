@@ -1,9 +1,6 @@
 package org.pstcl.ea.controller.mapping;
 
-import java.util.Date;
-
 import org.pstcl.ea.model.mapping.LocationEMFModel;
-import org.pstcl.ea.model.mapping.LocationMFMap;
 import org.pstcl.ea.service.impl.masters.EMFMappingService;
 import org.pstcl.ea.service.impl.masters.LocationMasterService;
 import org.springframework.beans.factory.annotation.Autowired;

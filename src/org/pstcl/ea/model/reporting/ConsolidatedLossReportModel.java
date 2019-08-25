@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
-import org.pstcl.ea.model.entity.LossReportEntity;
+import org.pstcl.ea.entity.LossReportEntity;
 
 public class ConsolidatedLossReportModel {
 	

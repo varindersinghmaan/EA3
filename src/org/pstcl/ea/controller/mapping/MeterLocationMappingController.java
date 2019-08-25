@@ -1,17 +1,14 @@
 package org.pstcl.ea.controller.mapping;
 
-import java.util.Date;
 import java.util.List;
 
-import org.pstcl.ea.model.LocationSurveyDataModel;
+import org.pstcl.ea.entity.mapping.MeterLocationMap;
 import org.pstcl.ea.model.mapping.LocationMeterMappingModel;
-import org.pstcl.ea.model.mapping.MeterLocationMap;
 import org.pstcl.ea.service.impl.SubstationDataServiceImpl;
 import org.pstcl.ea.service.impl.masters.LocationMasterService;
 import org.pstcl.ea.service.impl.masters.LocationMeterMappingService;
-import org.pstcl.ea.service.impl.masters.MeterMasterService;
-import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.service.impl.masters.LocationUtilService;
+import org.pstcl.ea.service.impl.masters.MeterMasterService;
 import org.pstcl.model.FilterModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,7 +50,7 @@ public class MeterLocationMappingController {
 		FilterModel locationModel = restService.getLocationModel(circleCode, divCode, substationCode,null);
 		model.addAttribute("currentUser", substationDataService.getLoggedInUser());
 		model.addAttribute("substationList", locationMeterMappingService.findSubstationEnergyMeters(locationModel));
-	//	model.addAttribute("notMappedMeters",meterMasterService.findNotMappedMeters());
+		//	model.addAttribute("notMappedMeters",meterMasterService.findNotMappedMeters());
 		return "masterViews/substationListInsert";
 	}
 
@@ -65,7 +62,7 @@ public class MeterLocationMappingController {
 		model.addAttribute("notMappedMeters",meterMasterService.findNotMappedMeters());
 		return "masterViews/substationList";
 	}
-	
+
 
 
 	/**
@@ -78,14 +75,16 @@ public class MeterLocationMappingController {
 	@RequestMapping(value = { "/mapMeter" }, method = RequestMethod.POST)
 	public ModelAndView saveMeterLocationMapping(LocationMeterMappingModel locationMeterMap, BindingResult bindingResult,
 			ModelMap model) {
-		
+
 		ModelAndView modelAndView=null;
 		String error = locationMeterMappingService.validateDates(locationMeterMap);
 
-		if (error == null && locationMeterMappingService.saveLocationMeterMapping(locationMeterMap)) {
+		LocationMeterMappingModel resultModel=locationMeterMappingService.saveLocationMeterMapping(locationMeterMap);
+		if (error == null && resultModel.getMappingSuccesful()) {
 			List<MeterLocationMap> mappings = restService.findLocations(locationMeterMap.getMeterMaster());
 			model.addAttribute("locationMeterMappingList", mappings);
 			model.addAttribute("changeMeterSnippet", locationMeterMap);
+			model.addAttribute("locationSurveyDataModel", resultModel);
 			modelAndView= new ModelAndView("mapping/success", model);
 		}
 		else 
@@ -93,23 +92,16 @@ public class MeterLocationMappingController {
 
 			model.addAttribute("error", error);
 			model.addAttribute("changeMeterSnippet", locationMeterMap);
-
 			modelAndView= new ModelAndView("mapping/mapMeterLoc", model);
 		}
 		return modelAndView;
 	}
-	
-	
-	@RequestMapping(value = { "/mapMeterEffect" }, method = RequestMethod.POST)
-	public String mapMeterEffect(LocationMeterMappingModel locationMeterMap, BindingResult bindingResult,
-			ModelMap modelMap) {
-		LocationSurveyDataModel locationSurveyDataModel= locationMeterMappingService.getDailyTransactionsByMeterGreaterThanDate(locationMeterMap);
-		modelMap.addAttribute("locationSurveyDataModel",locationSurveyDataModel);
-		return "locationImportExport";
-	}
-	
-	
-	
+
+
+
+
+
+
 
 
 	/**
@@ -130,7 +122,7 @@ public class MeterLocationMappingController {
 		return new ModelAndView("mapping/mapMeterLoc", model);
 
 	}
-	
+
 	/**
 	 * To change location details of an existing mapped meter when clicked in view energy details
 	 * @param meterlocationId
@@ -149,7 +141,7 @@ public class MeterLocationMappingController {
 		return new ModelAndView("mapping/removeLocationMeter", model);
 
 	}
-	
+
 	/**
 	 * Saves the changed meter mapping in textAjax.jsp
 	 * @param locationMeterMap
@@ -160,15 +152,16 @@ public class MeterLocationMappingController {
 	@RequestMapping(value = { "/removeLocationMeter" }, method = RequestMethod.POST)
 	public ModelAndView saveRemovedMeterLocationMapping(LocationMeterMappingModel locationMeterMap, BindingResult bindingResult,
 			ModelMap model) {
-		
+
 		ModelAndView modelAndView=null;
 		String error = locationMeterMappingService.validateEndDate(locationMeterMap);
-		
 
-		if (error == null && locationMeterMappingService.saveLocationMeterMapping(locationMeterMap)) {
-			locationMeterMappingService.endLocationMeterMapping(locationMeterMap);
+		LocationMeterMappingModel resultModel=locationMeterMappingService.endLocationMeterMapping(locationMeterMap);
+
+		if (error == null &&resultModel.getMappingSuccesful()) {
 			List<MeterLocationMap> mappings = restService.findLocations(locationMeterMap.getMeterMaster());
 			model.addAttribute("locationMeterMappingList", mappings);
+			model.addAttribute("locationSurveyDataModel", resultModel);
 			modelAndView= new ModelAndView("mapping/success", model);
 		}
 		else 
@@ -181,8 +174,8 @@ public class MeterLocationMappingController {
 		}
 		return modelAndView;
 	}
-	
-	
+
+
 	/**
 	 * To change location details of unmapped meter in view energy details
 	 * @param meterId
@@ -215,7 +208,7 @@ public class MeterLocationMappingController {
 		return new ModelAndView("mapping/mapMeterLoc", model);
 	}
 
-	
+
 	@RequestMapping(value = { "/mappingHome" }, method = { RequestMethod.GET })
 	public String notMappedMeters(final ModelMap model) {
 		model.addAttribute("currentUser", substationDataService.getLoggedInUser());

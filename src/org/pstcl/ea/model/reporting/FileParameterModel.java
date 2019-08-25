@@ -1,7 +1,7 @@
 package org.pstcl.ea.model.reporting;
 
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.entity.MeterMaster;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.MeterMaster;
 
 public class FileParameterModel {
 

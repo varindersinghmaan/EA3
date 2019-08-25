@@ -265,7 +265,26 @@ public class DateUtil {
 		return cal.getTime();
 	}
 
-
+	public static Date startOfTheDay(Date current) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(current);
+		calendar.set(Calendar.HOUR, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		current = calendar.getTime();
+		return current;
+	}
+	public static Date previousDay(Date current) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(current);
+		calendar.add(Calendar.DATE, -1);
+		calendar.set(Calendar.HOUR, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		current = calendar.getTime();
+		return current;
+	}
+	
 	public static Date nextDay(Date current) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(current);

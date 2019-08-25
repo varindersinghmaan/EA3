@@ -3,7 +3,7 @@ package org.pstcl.ea.model.reporting;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.pstcl.ea.model.entity.LocationMaster;
+import org.pstcl.ea.entity.LocationMaster;
 
 public class TamperDetailsProjectionEntity {
 	

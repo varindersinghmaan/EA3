@@ -8,14 +8,15 @@ import org.apache.commons.collections4.ListUtils;
 import org.pstcl.ea.dao.IDailyTransactionDao;
 import org.pstcl.ea.dao.ILocationEMFDao;
 import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.mapping.LocationMFMap;
+import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
 import org.pstcl.ea.model.LocationSurveyDataModel;
-import org.pstcl.ea.model.entity.DailyTransaction;
-import org.pstcl.ea.model.entity.LocationMaster;
 import org.pstcl.ea.model.mapping.LocationEMFModel;
-import org.pstcl.ea.model.mapping.LocationMFMap;
-import org.pstcl.ea.model.mapping.MeterLocationMap;
 import org.pstcl.ea.service.impl.parallel.CalculationMappingUtil;
 import org.pstcl.ea.util.DateUtil;
+import org.pstcl.ea.util.EAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -128,6 +129,7 @@ public class EMFMappingService extends CalculationMappingUtil {
 			String remarks = dailyTransaction.getRemarks();
 			remarks = (remarks == null ? "" : remarks) + "Modified due to MF Mapping";
 			dailyTransaction.setRemarks(remarks);
+			dailyTransaction.setTransactionStatus(EAUtil.DAILY_TRANSACTION_MODFIED_DUE_TO_MF_MAPPING);
 		}
 		dailyTransactionDao.save(dailyTransactions, null);
 

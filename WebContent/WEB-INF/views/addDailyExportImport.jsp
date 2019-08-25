@@ -169,6 +169,13 @@
 										value="<c:out value="${status.value}"/>" />
 								</spring:bind> 
 								<spring:bind
+									path="dailyTransactions[${indexStatus.index}].transactionStatus">
+									<input type="hidden"
+										name="<c:out value="${status.expression}"/>"
+										id="<c:out value="${status.expression}"/>"
+										value="<c:out value="${status.value}"/>" />
+								</spring:bind>
+								<spring:bind
 									path="dailyTransactions[${indexStatus.index}].transactionDate">
 									<input type="hidden"
 										name="<c:out value="${status.expression}"/>"
@@ -194,7 +201,10 @@
 										id="<c:out value="${status.expression}"/>"><c:out
 											value="${status.value}" />
 															</textarea>
-								</spring:bind></td>
+								</spring:bind>
+								
+								
+								</td>
 						</tr>
 
 					</c:forEach>

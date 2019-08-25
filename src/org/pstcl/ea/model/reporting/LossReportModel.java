@@ -3,8 +3,8 @@ package org.pstcl.ea.model.reporting;
 import java.util.Date;
 import java.util.List;
 
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.entity.LossReportEntity;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.LossReportEntity;
 
 public class LossReportModel {
 	private String criteria;

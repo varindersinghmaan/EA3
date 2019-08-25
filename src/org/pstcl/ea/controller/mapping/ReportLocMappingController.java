@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.model.MapLossReportLocationModel;
-import org.pstcl.ea.model.entity.LocationMaster;
 import org.pstcl.ea.service.impl.masters.ReportLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

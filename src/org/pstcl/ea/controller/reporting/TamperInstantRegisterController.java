@@ -30,7 +30,8 @@ public class TamperInstantRegisterController {
 
 	@Autowired
 	private TamperInstantRegisterService tamperService;
-	
+
+	@Autowired
 	private ReportService lossReportService1;
 
 

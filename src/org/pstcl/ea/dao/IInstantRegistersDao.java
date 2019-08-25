@@ -2,9 +2,9 @@ package org.pstcl.ea.dao;
 
 import java.util.List;
 
-import org.pstcl.ea.model.entity.EAUser;
-import org.pstcl.ea.model.entity.InstantRegisters;
-import org.pstcl.ea.model.entity.MeterMaster;
+import org.pstcl.ea.entity.EAUser;
+import org.pstcl.ea.entity.MeterMaster;
+import org.pstcl.ea.entity.meterTxnEntity.InstantRegisters;
 
 
 public interface IInstantRegistersDao {

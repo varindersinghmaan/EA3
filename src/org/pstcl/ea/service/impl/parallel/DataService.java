@@ -6,18 +6,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.entity.FileMaster;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.MeterMaster;
+import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
+import org.pstcl.ea.entity.meterTxnEntity.InstantRegisters;
+import org.pstcl.ea.entity.meterTxnEntity.TamperLogTransaction;
 import org.pstcl.ea.model.CMRIFileDataModel;
 import org.pstcl.ea.model.FileFilter;
 import org.pstcl.ea.model.FileModel;
 import org.pstcl.ea.model.LocationFileModel;
 import org.pstcl.ea.model.LocationSurveyDataModel;
-import org.pstcl.ea.model.entity.DailyTransaction;
-import org.pstcl.ea.model.entity.FileMaster;
-import org.pstcl.ea.model.entity.InstantRegisters;
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.entity.MeterMaster;
-import org.pstcl.ea.model.entity.TamperLogTransaction;
-import org.pstcl.ea.model.mapping.MeterLocationMap;
 import org.pstcl.ea.model.reporting.FileParameterModel;
 import org.pstcl.ea.model.reporting.ReportParametersModel;
 import org.pstcl.ea.service.impl.EnergyAccountsService;
@@ -281,14 +281,13 @@ public class DataService extends EnergyAccountsService{
 
 		filter.setFileActionStatus(EAUtil.FILE_ACTION__APPROVED_AE);
 		List<FileMaster> fileMasters=fileMasterDao.filterFiles(filter);
+		//set file status to processing to stop user from processing same file again and again
 
 		for (FileMaster fileMaster : fileMasters) {
-			//set file status to processing to stop user from processing same file again and again
-
 			fileMaster.setProcessingStatus(EAUtil.FILE_UNDER_PROCESSING);
 			fileMasterDao.save(fileMaster, getLoggedInUser());
-//			DataReaderThread dataReaderThread= context.getBean(DataReaderThread.class);
-//			dataReaderThread.saveFileDetails(fileMaster);
+			DataReaderThread dataReaderThread= context.getBean(DataReaderThread.class);
+			dataReaderThread.saveFileDetails(fileMaster);
 		}
 		
 		//process files in asynchronous mode

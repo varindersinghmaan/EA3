@@ -1,3 +1,4 @@
+<%@page import="org.pstcl.ea.util.EAUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
@@ -10,7 +11,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:choose>
-	<c:when test="${fileDetails.processingStatus eq -100}">
+	<c:when test="${fileDetails.processingStatus eq EAUtil.FILE_ERROR_FILE_NOT_READABLE}">
 		<tr>
 			<td>${indexStatus.index+1 }</td>
 			<td class="table-warning"><span> <i class="fa fa-warning"
@@ -69,10 +70,10 @@
 			</span></td>
 	</c:when>
 
-	<c:when test="${fileDetails.processingStatus eq 100}">
-		<tr>
+	<c:when test="${fileDetails.processingStatus eq EAUtil.FILE_ZIP_EXTRACTED}">
+		<tr class="table-success">
 			<td>${indexStatus.index+1 }</td>
-			<td class="table-success"><c:choose>
+			<td ><c:choose>
 					<c:when test="${fileDetails.fileActionStatus eq 25}">
 						<span> <i class="fa fa-warning"
 							style="font-size: 18px; color: yellow"> Please approve the
@@ -85,7 +86,7 @@
 					</c:otherwise>
 				</c:choose></td>
 	</c:when>
-	<c:when test="${fileDetails.processingStatus eq 200}">
+	<c:when test="${fileDetails.processingStatus eq EAUtil.FILE_TXT_PROCESSED}">
 		<tr>
 			<td>${indexStatus.index+1 }</td>
 

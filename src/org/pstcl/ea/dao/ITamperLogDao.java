@@ -3,12 +3,12 @@ package org.pstcl.ea.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.pstcl.ea.entity.EAUser;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.MeterMaster;
+import org.pstcl.ea.entity.SubstationMaster;
+import org.pstcl.ea.entity.meterTxnEntity.TamperLogTransaction;
 import org.pstcl.ea.model.ImportExportModel;
-import org.pstcl.ea.model.entity.EAUser;
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.entity.MeterMaster;
-import org.pstcl.ea.model.entity.SubstationMaster;
-import org.pstcl.ea.model.entity.TamperLogTransaction;
 import org.pstcl.ea.model.reporting.TamperDetailsProjectionEntity;
 
 

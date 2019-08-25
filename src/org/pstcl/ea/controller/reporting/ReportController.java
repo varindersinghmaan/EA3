@@ -20,6 +20,7 @@ public class ReportController {
 	@Autowired
 	private ReportService lossReportService;
 	
+	
 
 	
 		

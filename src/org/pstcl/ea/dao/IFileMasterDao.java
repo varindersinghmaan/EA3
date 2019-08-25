@@ -3,11 +3,11 @@ package org.pstcl.ea.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.pstcl.ea.entity.EAUser;
+import org.pstcl.ea.entity.FileMaster;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.MeterMaster;
 import org.pstcl.ea.model.FileFilter;
-import org.pstcl.ea.model.entity.EAUser;
-import org.pstcl.ea.model.entity.FileMaster;
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.entity.MeterMaster;
 
 
 public interface IFileMasterDao  {

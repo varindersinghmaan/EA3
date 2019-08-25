@@ -3,9 +3,9 @@ package org.pstcl.ea.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.pstcl.ea.model.entity.EAUser;
-import org.pstcl.ea.model.mapping.LocationMFMap;
-import org.pstcl.ea.model.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.EAUser;
+import org.pstcl.ea.entity.mapping.LocationMFMap;
+import org.pstcl.ea.entity.mapping.MeterLocationMap;
 
 
 public interface ILocationEMFDao {

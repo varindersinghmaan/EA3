@@ -9,12 +9,12 @@ import org.pstcl.ea.dao.ILocationEMFDao;
 import org.pstcl.ea.dao.ILocationMasterDao;
 import org.pstcl.ea.dao.IMeterMasterDao;
 import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.MeterMaster;
+import org.pstcl.ea.entity.mapping.LocationMFMap;
+import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
 import org.pstcl.ea.model.LocationSurveyDataModel;
-import org.pstcl.ea.model.entity.DailyTransaction;
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.entity.MeterMaster;
-import org.pstcl.ea.model.mapping.LocationMFMap;
-import org.pstcl.ea.model.mapping.MeterLocationMap;
 import org.pstcl.ea.service.impl.parallel.CalculationMappingUtil;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
@@ -81,12 +81,17 @@ public class DailyTxnService extends EnergyAccountsService{
 					dailyTransaction.setExportWHF(dailyTransactionFromLoadSurvey.getExportWHF());
 					dailyTransaction.setImportWHF(dailyTransactionFromLoadSurvey.getImportWHF());
 					dailyTransaction.setRemarks(EAUtil.DAILY_TRANSACTION_FROM_LOAD_SURVEY);
+					dailyTransaction.setTransactionStatus(EAUtil.DAILY_TRANSACTION_CALC_FROM_LOAD_SURVEY);
+					
 				}
 				else
 				{
 					dailyTransaction.setExportWHF(new BigDecimal(0));
 					dailyTransaction.setImportWHF(new BigDecimal(0));
+					
 					dailyTransaction.setRemarks(EAUtil.DAILY_TRANSACTION_ENTERED_MANUALLY);
+					dailyTransaction.setTransactionStatus(EAUtil.DAILY_TRANSACTION_ADDED_MANUALLY);
+					
 				}
 			}
 			dailyTransactions.add(dailyTransaction);

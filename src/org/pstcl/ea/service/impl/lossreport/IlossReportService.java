@@ -3,8 +3,8 @@ package org.pstcl.ea.service.impl.lossreport;
 import java.util.Date;
 import java.util.List;
 
-import org.pstcl.ea.model.entity.InstantRegisters;
-import org.pstcl.ea.model.entity.LossReportEntity;
+import org.pstcl.ea.entity.LossReportEntity;
+import org.pstcl.ea.entity.meterTxnEntity.InstantRegisters;
 import org.pstcl.ea.model.reporting.ConsolidatedLossReportModel;
 import org.pstcl.ea.model.reporting.LossReportModel;
 import org.pstcl.ea.model.reporting.ReportParametersModel;

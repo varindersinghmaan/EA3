@@ -2,11 +2,11 @@ package org.pstcl.ea.service.impl.masters;
 
 import java.util.List;
 
-import org.pstcl.ea.dao.IAddReportLocationsDao;
+import org.pstcl.ea.dao.MontlyReportLocationsDao;
 import org.pstcl.ea.dao.ILocationMasterDao;
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.mapping.ReportLocationsMonthMap;
 import org.pstcl.ea.model.MapLossReportLocationModel;
-import org.pstcl.ea.model.entity.LocationMaster;
-import org.pstcl.ea.model.mapping.ReportLocationsMonthMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class ReportLocationService {
 	
 	@Autowired 
-	IAddReportLocationsDao addReportLocationsDao; 
+	MontlyReportLocationsDao addReportLocationsDao; 
 	
 	@Autowired
 	ILocationMasterDao locationMasterDao;

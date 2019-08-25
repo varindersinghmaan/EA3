@@ -5,8 +5,8 @@ import java.util.Date;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.model.MastersForLocationEntry;
-import org.pstcl.ea.model.entity.LocationMaster;
 import org.pstcl.ea.model.reporting.ReportParametersModel;
 import org.pstcl.ea.service.impl.lossreport.IlossReportService;
 import org.pstcl.ea.service.impl.lossreport.ReportService;

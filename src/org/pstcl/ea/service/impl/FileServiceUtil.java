@@ -15,7 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.FilenameUtils;
-import org.pstcl.ea.model.entity.FileMaster;
+import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.service.impl.parallel.TimeoutProcessKiller;
 import org.pstcl.ea.util.EAUtil;
 import org.springframework.util.FileCopyUtils;

@@ -3,8 +3,9 @@ package org.pstcl.ea.model.mapping;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.pstcl.ea.entity.LocationMaster;
+import org.pstcl.ea.entity.mapping.LocationMFMap;
 import org.pstcl.ea.model.LocationSurveyDataModel;
-import org.pstcl.ea.model.entity.LocationMaster;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class LocationEMFModel {

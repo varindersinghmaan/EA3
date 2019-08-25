@@ -1,7 +1,7 @@
 package org.pstcl.ea.converters;
 
-import org.pstcl.ea.dao.IAddReportLocationsDao;
-import org.pstcl.ea.model.mapping.ReportLocationsMonthMap;
+import org.pstcl.ea.dao.MontlyReportLocationsDao;
+import org.pstcl.ea.entity.mapping.ReportLocationsMonthMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ public class MapReportLocationsConverter implements Converter<String,ReportLocat
 	
 	static final Logger logger;
 	@Autowired 
-	IAddReportLocationsDao service; 
+	MontlyReportLocationsDao service; 
 	
 	static {
 		logger = LoggerFactory.getLogger((Class) MapReportLocationsConverter.class);
