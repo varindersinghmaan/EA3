@@ -15,7 +15,8 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 
-
+<script
+	src="${pageContext.servletContext.contextPath}/static/js/FileSaver.js"></script>
 
 <script type="text/javascript">
 	
@@ -24,14 +25,9 @@
 		showProgressBar();
 
 		$('#lossReportDiv').css('display', 'none');
-		$('#loader').css('display', 'block');
-
+		
 		if ($("#reportDate").val() == "") {
-			var newdate = new Date();
-			newdate.setDate(new Date().getDate() - 15); // minus the date
-			document.getElementById("reportDate").value = newdate.getFullYear()
-					+ "-" + ("0" + (newdate.getMonth() + 1)).slice(-2);
-			
+			setDefaultMonth();
 		}
 
 		if ($("#reportDate").val() != "") {
@@ -55,12 +51,11 @@
 		}
 	
 
-	function post(path, params, method='post') {
-
+	function post(path, params) {
 		  // The rest of this code assumes you are not using a library.
 		  // It can be made less wordy if you use one.
 		  const form = document.createElement('form');
-		  form.method = method;
+		  form.method = 'post';
 		  form.action = path;
 
 		  for (const key in params) {
@@ -84,37 +79,22 @@
 		var reportParamsModel = applyFilters();
 		post("lossReportExl",reportParamsModel);
 		
-		var millisecondsToWait = 2000;
+		var millisecondsToWait = 30000;
 		setTimeout(function() {
 			hideProgressBar();
 		}, millisecondsToWait);
-// 	$.ajax({
-// 			url : "lossReportExl",
-// 			type : "POST",
-// 			data : JSON.stringify(reportParamsModel),
-// 			contentType : 'application/json',
-// 			success : function(response) {
-// 				$("#lossReportDiv").html(response);
-// 				initDataTables();
-// 				$('#lossReportDiv').css('display', 'block');
-// 				hideProgressBar();
-				
-// 				$('#loader').css('display', 'none');
 
-// 			},
-// 			error : function(data, status, er) {
-// 				alert("OBJECT Error" + data + er);
-// 			}
-// 		});
 
 	}
-		
+
+	
+	
 	function loadReport()
 	{
 		var reportParamsModel = applyFilters();
 		
 	$.ajax({
-			url : "lossReportDyn",
+			url : "lossReportDashBoard",
 			type : "POST",
 			data : JSON.stringify(reportParamsModel),
 			contentType : 'application/json',
@@ -123,9 +103,7 @@
 				initDataTables();
 				$('#lossReportDiv').css('display', 'block');
 				hideProgressBar();
-				
-				$('#loader').css('display', 'none');
-
+			
 			},
 			error : function(data, status, er) {
 				alert("OBJECT Error" + data + er);
@@ -167,10 +145,9 @@
 	<%@include file="../html/customProgressBarModal.html"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			initDataTables();
-			myFunction();
 			setDefaultMonth();
 			$('#loadReportButton').click();
+		
 		});
 		
 		function initDataTables()
@@ -191,7 +168,7 @@
 		function setDefaultMonth()
 		{
 			var newdate = new Date();
-			newdate.setDate(new Date().getDate() - 37); // minus the date
+			newdate.setDate(new Date().getDate() - 33); // minus the date
 			document.getElementById("reportDate").value = newdate.getFullYear()
 					+ "-" + ("0" + (newdate.getMonth() + 1)).slice(-2);
 		
@@ -238,34 +215,34 @@
 				Boundary
 				<div id="intervalDiv" class="btn-group btn-group-toggle"
 					data-toggle="buttons">
-					<label class="btn btn-primary"> <input type="radio"
+					<label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3" value="" autocomplete="off"
 						checked="checked">Consolidated Loss Report
-					</label> <label class="btn btn-primary"> <input type="radio"
+					</label> <label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3"
 						value="<%=EAUtil.LOSS_REPORT_CRITERIA_G_T%>" autocomplete="off">
 						(G-T)
-					</label> <label class="btn btn-primary"> <input type="radio"
+					</label> <label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3"
 						value="<%=EAUtil.LOSS_REPORT_CRITERIA_I_T_%>" autocomplete="off">
 						(I-T)
-					</label> <label class="btn btn-primary"> <input type="radio"
+					</label> <label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3"
 						value="<%=EAUtil.LOSS_REPORT_CRITERIA_T_D_220_66_%>"
 						autocomplete="off"> (T-D)(220/66)
-					</label> <label class="btn btn-primary"> <input type="radio"
+					</label> <label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3"
 						value="<%=EAUtil.LOSS_REPORT_CRITERIA_T_D_132_11_%>"
 						autocomplete="off"> (T-D)(132/11)
-					</label> <label class="btn btn-primary"> <input type="radio"
+					</label> <label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3"
 						value="<%=EAUtil.LOSS_REPORT_CRITERIA_T_D_132_33_%>"
 						autocomplete="off"> (T-D)(132/33)
-					</label> <label class="btn btn-primary"> <input type="radio"
+					</label> <label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3"
 						value="<%=EAUtil.LOSS_REPORT_CRITERIA_T_D_132_66%>"
 						autocomplete="off"> (T-D)(132/66)
-					</label> <label class="btn btn-primary"> <input type="radio"
+					</label> <label class="btn btn-secondary"> <input type="radio"
 						name="reportType" id="option3"
 						value="<%=EAUtil.LOSS_REPORT_CRITERIA_INDEPENDENT_%>"
 						autocomplete="off"> (T-D)(Independent)
@@ -283,7 +260,7 @@
 					type="button" onclick="downloadExlReport()"
 					value="Download as Excel" class="btn btn-primary btn-sm" /> <a
 					class="btn btn-light btn-sm float-right"
-					href="javascript:window.location='lossReportDyn'"><span
+					href="javascript:window.location='lossReportDashBoard'"><span
 					class="glyphicon glyphicon-plus"></span>Clear</a>
 			</div>
 

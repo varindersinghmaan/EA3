@@ -28,7 +28,7 @@
 <title>Energy Meters</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -104,14 +104,14 @@
 						<c:forEach items="${fileModel.filesUploadedDetail}"
 							var="fileDetails" varStatus="indexStatus">
 
-							<%@include file="fileDetailsStatusSnippet.jsp"%>
+							<%@include file="./fileDetails/fileDetailsStatusSnippet.jsp"%>
 							<td>
 								Substation:${fileDetails.location.substationMaster.stationName}
 
 								Division:${fileDetails.location.divisionMaster.divisionname}
 								Circle:${fileDetails.location.circleMaster.circleName}</td>
 							<td>Meter
-								Location:${fileDetails.location.feederMaster.feederName}
+								Location:${fileDetails.location.feederName}
 								Boundary
 								Type:${fileDetails.location.boundaryTypeMaster.boundaryType}
 								${fileDetails.location.locationId} Meter Details(Sr No:
@@ -122,7 +122,7 @@
 							<td>${fileDetails.userfileName}</td>
 							<td><fmt:formatDate value="${fileDetails.transactionDate}"
 									pattern="dd/MM/yyyy HH:mm:ss" /></td>
-							<td><%@include file="fileDetailsActionSnippet.jsp"%>
+							<td><%@include file="./fileDetails/fileDetailsActionSnippet.jsp"%>
 							</td>
 
 
@@ -177,7 +177,7 @@
 										<td>${locDetails.locationMaster.boundaryTypeMaster.boundaryType}</td>
 
 
-										<td>${locDetails.locationMaster.feederMaster.feederName}</td>
+										<td>${locDetails.locationMaster.feederName}</td>
 										<td>${locDetails.locationMaster.boundaryTypeMaster.boundaryType}</td>
 
 

@@ -25,6 +25,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.sun.xml.internal.ws.policy.sourcemodel.ModelNode;
+
+import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
 
 
 @Controller
@@ -39,16 +44,11 @@ public class LossReportController {
 	private ExcelGeneratorService2 excelGeneratorService;
 
 	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
-	@RequestMapping(value = { "/lossReportDyn" }, method = { RequestMethod.GET })
+	@RequestMapping(value = {"/lossReportDashBoard", "/lossReportDyn" }, method = { RequestMethod.GET })
 	public String reportsHome(final ModelMap model) {
 		return "reporting/lossReportDashboard";
 	}
 	
-	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
-	@RequestMapping(value = { "/reportDashboard" }, method = { RequestMethod.GET })
-	public String reportDashboard(final ModelMap model) {
-		return "reporting/reportDashboard";
-	}
 
 
 
@@ -72,72 +72,60 @@ public class LossReportController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
-	@RequestMapping(value = "/lossReportDyn", method = RequestMethod.POST)
-	public String lossReportDyn(@Valid @RequestBody ReportParametersModel parametersModel , Errors errors,
+	@RequestMapping(value = "/lossReportDashBoard", method = RequestMethod.POST)
+	public ModelAndView lossReportDyn(@Valid @RequestBody ReportParametersModel parametersModel , Errors errors,
 			ModelMap modelMap) {
 
-		parametersModel.setReportMonth(parametersModel.getReportMonth()-1);
-		if (parametersModel.getReportYear() == null) {
-			parametersModel.setReportYear(new Date().getYear());
-		}
-		if (parametersModel.getReportMonth() == null) {
-			parametersModel.setReportMonth(new Date().getMonth());
-		}
+		parametersModel=initialiseMonthYear(parametersModel);
 
 		if  (StringUtils.isNotEmpty(parametersModel.getReportType())) {
-			getReportDetails(parametersModel.getReportType(), parametersModel.getReportMonth(), parametersModel.getReportYear(), modelMap);
-			return "reporting/lossReportInsert";
+			return getReportDetails(parametersModel, modelMap);
 		} else {
-			getLossReport(parametersModel.getReportMonth(), parametersModel.getReportYear(), modelMap);
-			return "reporting/lossReportConsolidatedInsert";
-
+			return getLossReport(parametersModel, modelMap);
+		
 		}
 	}
+	
+	private ReportParametersModel initialiseMonthYear(ReportParametersModel parametersModel)
+	{
+	
 
-
-	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
-	@RequestMapping(value = "/getReport", method = RequestMethod.GET)
-	public String getReportDetails(@RequestParam(value = "type") String reportType,
-			@RequestParam(value = "month") Integer month, @RequestParam(value = "year") Integer year,
-			ModelMap modelMap) {
-		modelMap.addAttribute("lossReportModel", lossReportService.getReport(reportType, month, year));
-		modelMap.addAttribute("reportMonthYearDate", DateUtil.convertMonthYearToDate(month, year));
-
-		modelMap.addAttribute("monthOfReport", month);
-		modelMap.addAttribute("yearOfReport", year);
-
-		return "reporting/lossReport";
+		parametersModel=lossReportService.initialiseMonthYear(parametersModel);
+		return parametersModel;
 	}
 
-	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
-	@RequestMapping(value = "/getLossReport", method = RequestMethod.GET)
-	public String getLossReport(@RequestParam(value = "month") Integer month,
-			@RequestParam(value = "year") Integer year, ModelMap modelMap) {
+
+	private ModelAndView getReportDetails(ReportParametersModel reportParametersModel, ModelMap modelMap) {
+		
+		modelMap.addAttribute("lossReportModel", lossReportService.getReport(reportParametersModel.getReportType(), reportParametersModel.getReportMonth(), reportParametersModel.getReportYear()));
+		initializeModelMonthYear(reportParametersModel, modelMap);
+
+		return new ModelAndView("reporting/lossReportInsert",modelMap);
+	}
+
+	
+	private ModelAndView getLossReport(ReportParametersModel reportParametersModel, ModelMap modelMap) {
+		
+		
 		modelMap.addAttribute("consolidatedLossReportModel",
-				lossReportService.getConsolidatedMonthlyLossReport(month, year,false));
-		modelMap.addAttribute("reportMonthYearDate", DateUtil.convertMonthYearToDate(month, year));
-
-		modelMap.addAttribute("monthOfReport", month);
-		modelMap.addAttribute("yearOfReport", year);
-
-		return "reporting/lossReportConsolidated";
+				lossReportService.getConsolidatedMonthlyLossReport(reportParametersModel.getReportMonth(), reportParametersModel.getReportYear(),false));
+		initializeModelMonthYear(reportParametersModel, modelMap);
+		return new ModelAndView("reporting/lossReportConsolidatedInsert",modelMap);
 	}
 
 
 
-	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
-	@RequestMapping(value = "/getLossReport", method = RequestMethod.POST)
-	public String getLossReportPost(@RequestParam(value = "startDate") Integer month,
-			@RequestParam(value = "endDate") Integer year, ModelMap modelMap) {
-		modelMap.addAttribute("consolidatedLossReportModel",
-				lossReportService.getConsolidatedMonthlyLossReport(month, year,false));
-		modelMap.addAttribute("reportMonthYearDate", DateUtil.convertMonthYearToDate(month, year));
 
-		modelMap.addAttribute("monthOfReport", month);
-		modelMap.addAttribute("yearOfReport", year);
 
-		return "reporting/lossReportConsolidated";
-	}
+
+
+
+
+	private void initializeModelMonthYear(ReportParametersModel parametersModel, ModelMap modelMap) {
+		modelMap.addAttribute("reportMonthYearDate", DateUtil.convertMonthYearToDate(parametersModel.getReportMonth(), parametersModel.getReportYear()));
+		modelMap.addAttribute("monthOfReport", parametersModel.getReportMonth());
+		modelMap.addAttribute("yearOfReport", parametersModel.getReportYear());
+		}
 
 
 }

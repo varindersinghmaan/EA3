@@ -7,7 +7,7 @@
 <meta charset="ISO-8859-1">
 <title>Add Location Details</title>
 </head>
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="../authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -60,7 +60,6 @@
 
 	<script type="text/javascript">
 		function initAllList() {
-			$('feederMaster').find('option').remove().end();
 			$('deviceTypeMaster').find('option').remove().end();
 			$('boundaryTypeMaster').find('option').remove().end();
 			$('utiltiyName').find('option').remove().end();
@@ -77,12 +76,7 @@
 		}
 		function populateAllList(data, status) {
 
-			$.each(data.feederMaster, function(idx, obj) {
-				//alert(obj.circleName);
-				$('#feederMaster').append(
-						$("<option></option>").attr("value", obj.id).text(
-								obj.feederName));
-			});
+		
 
 			$.each(data.boundaryTypeMaster, function(idx, obj) {
 				//alert(obj.circleName);
@@ -247,15 +241,15 @@
 		}
 	</script>
 
-	
 
-		<script>
+
+	<script>
 		$(document).ready(function() {
 			initLocations();
 			initAllList();
 		});
 	</script>
-	
+
 	<form:form method="POST" modelAttribute="locationMaster"
 		id="changeDetails">
 
@@ -296,9 +290,9 @@
 				<input type="hidden" id="divisionMaster" />
 
 				<input type="hidden" id="circleMaster" />
-	
+
 				<input type="hidden" id="edit" />
-	
+
 			</c:otherwise>
 		</c:choose>
 
@@ -311,10 +305,9 @@
 
 		<div class="row">
 			<div class="form-control ">
-				<label class="col-lg-2"><b>FeederMaster</b></label>
+				<label class="col-lg-2"><b>Feeder Name</b></label>
 
-				<form:select id="feederMaster" path="feederMaster">
-				</form:select>
+				<form:input path="feederName" />
 			</div>
 		</div>
 

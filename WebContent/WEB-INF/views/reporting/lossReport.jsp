@@ -25,7 +25,7 @@
 <title>Loss Report</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="../authheader.jsp"%>
 
 
@@ -186,7 +186,7 @@
 						<td>${lossReportEntity.location.utiltiyName}</td>
 						<td>${lossReportEntity.location.boundaryTypeMaster.boundaryType}</td>
 						<td>${lossReportEntity.location.substationMaster.stationName}</td>
-						<td>${lossReportEntity.location.feederMaster.feederName}</td>
+						<td>${lossReportEntity.location.feederName}</td>
 						<td>${lossReportEntity.location.voltageLevel}</td>
 						<td>${lossReportEntity.meterSrNo}</td>
 

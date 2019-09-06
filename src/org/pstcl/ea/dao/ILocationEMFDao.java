@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.pstcl.ea.entity.EAUser;
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 
 
 public interface ILocationEMFDao {
@@ -31,7 +31,7 @@ public interface ILocationEMFDao {
 
 
 
-	List<LocationMFMap> findLocationEmfByLocAndDate(List<MeterLocationMap> mtrLocMapList, Date startDateOfMonth);
+	List<LocationMFMap> findLocationEmfByLocAndDate(List<MapMeterLocation> mtrLocMapList, Date startDateOfMonth);
 
 
 

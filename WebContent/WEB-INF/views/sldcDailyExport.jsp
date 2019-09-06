@@ -29,7 +29,7 @@
 <title>Energy Meters</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<%@include file="dataTablesHeader.jsp"%>
 	
@@ -163,7 +163,7 @@
 							<td>${dailyTransactionForMeter.location.substationMaster.stationName}</td>
 							<td>${dailyTransactionForMeter.location.deviceTypeMaster.deviceType}</td>
 
-							<td>${dailyTransactionForMeter.location.feederMaster.feederName}</td>
+							<td>${dailyTransactionForMeter.location.feederName}</td>
 							<td>${dailyTransactionForMeter.location.boundaryTypeMaster.boundaryType}</td>
 
 							<td>${dailyTransactionForMeter.location.voltageLevel}</td>

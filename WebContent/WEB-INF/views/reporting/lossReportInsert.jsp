@@ -49,10 +49,8 @@
 					<th>Energy Exported at Boundary point (MWh)</th>
 
 
-					<th>Difference bw Import and Export (MWh)</th>
-					<th>Net MWh=(Export-Import)*MF/1000000</th>
-
-					<th width="100">Remarks</th>
+					
+					<th width="100">Remarks (Missing Import Export Data)</th>
 
 
 				</tr>
@@ -112,7 +110,7 @@
 					<td>${lossReportEntity.location.utiltiyName}</td>
 					<td>${lossReportEntity.location.boundaryTypeMaster.boundaryType}</td>
 					<td>${lossReportEntity.location.substationMaster.stationName}</td>
-					<td>${lossReportEntity.location.feederMaster.feederName}</td>
+					<td>${lossReportEntity.location.feederName}</td>
 					<td>${lossReportEntity.location.voltageLevel}</td>
 					<td>${lossReportEntity.meterSrNo}</td>
 
@@ -127,13 +125,13 @@
 					<th style="text-align: right">${lossReportEntity.importBoundaryPtMWH}</th>
 					<th style="text-align: right">${lossReportEntity.exportBoundaryPtMWH}</th>
 
-					<td align="right">${lossReportEntity.boundaryPtImportExportDifferenceMWH}</td>
-					<td align="right">${lossReportEntity.netMWH}</td>
+				
 
-					<td>No of Days of Export
-						Data:${lossReportEntity.exportWHFCount} No of Days of Import
-						Data:${lossReportEntity.importWHFCount} No of Days in the Month
-						Data:${lossReportEntity.daysInMonthCount}</td>
+					<td width="400">
+					<c:if test="${ lossReportEntity.exportWHFCount < lossReportEntity.daysInMonthCount}">
+					Missing Data:(${lossReportEntity.daysInMonthCount-lossReportEntity.exportWHFCount}) Days 
+					</c:if>
+					</td>
 
 					</tr>
 

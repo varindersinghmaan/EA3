@@ -21,7 +21,7 @@
 
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 
 	<%@include file="header.jsp"%>
 
@@ -127,14 +127,14 @@
 
 
 
-						<div class="form-control col-sm-4">
+						<div class="form-control col-sm-3">
 							<a class="nav-link"
 								href="javascript:window.location='uploadMultiZip'">
 
 								<div class="card" style="align-items: center;"
 									data-toggle="tooltip" data-placement="top"
 									title="Upload one of more zip file(s)">
-									<i class="fas fa-cloud-upload-alt  fa-5x"></i>
+									<i class="fas fa-cloud-upload-alt  fa-6x"></i>
 									<div class="card-body">
 										<div class="app-title">
 											Upload Zip File(s)<br>
@@ -144,13 +144,13 @@
 							</a>
 						</div>
 
-						<div class="form-control col-sm-4">
+						<div class="form-control col-sm-3">
 							<a class="nav-link"
 								href="javascript:window.location='uploadTxtFile'">
 								<div class="card" style="align-items: center;"
 									data-toggle="tooltip" data-placement="top"
 									title="Upload single text File">
-									<i class="fas fa-file-upload   fa-5x"></i>
+									<i class="fas fa-file-upload   fa-6x"></i>
 									<div class="card-body">
 										<div class="app-title">
 											Upload Text File<br>
@@ -165,13 +165,13 @@
 						access="hasAnyRole('ROLE_SLDC_USER','ROLE_SLDC_ADMIN','ROLE_SE')">
 
 
-						<div class="form-control col-sm-4">
+						<div class="form-control col-sm-3">
 							<a class="nav-link"
-								href="javascript:window.location='pendingRepoFiles?month=7&year=2019'">
+								href="javascript:window.location='fileDashboard'">
 								<div class="card" style="align-items: center;"
 									data-toggle="tooltip" data-placement="top"
 									title="List of Files in the Database">
-									<i class="fas fa-database  fa-5x"></i>
+									<i class="fas fa-database  fa-6x"></i>
 									<div class="card-body">
 										<div class="app-title">
 											Files Database<br>
@@ -184,13 +184,13 @@
 
 
 
-					<div class="form-control col-sm-4">
+					<div class="form-control col-sm-3">
 						<a class="nav-link"
 							href="javascript:window.location='substationMaster'">
 							<div class="card" style="align-items: center;"
 								data-toggle="tooltip" data-placement="top"
 								title="List of Energy Meters">
-								<i class="fas fa-tachometer-alt fa-5x"></i>
+								<i class="fas fa-tachometer-alt fa-6x"></i>
 								<div class="card-body">
 									<div class="app-title">
 										Energy Meter Master<br>
@@ -200,124 +200,61 @@
 						</a>
 
 					</div>
+					
 					<sec:authorize
 						access="hasAnyRole('ROLE_SLDC_USER','ROLE_SLDC_ADMIN')">
 
-						<div class="form-control col-sm-4">
-
-
-							<a href="#" role="button" class="nav-link btn popovers"
-								data-toggle="popover" title=""
-								data-content="
-								<a href='getLossReport?month=6&year=2019' title='July 2019'>July,2019</a>
-								<br>
-								<a href='getLossReport?month=5&year=2019' title='June 2019'>June,2019</a>
-								<br>
-								<a href='getLossReport?month=4&year=2019' title='May 2019'>May,2019</a>
-								<br>
-																<a href='lossReportDyn' title='New Report'>Report Dashboard</a>
-								<br>
-								"
-								data-original-title="Select Month"><span>
-									<div class="card" data-toggle="tooltip" data-placement="top"
-										title="View loss report for the selected month">
-										<i class="fas fa-receipt fa-5x"></i>
-										<div class="card-body">
-											<div class="app-title">
-												Loss Report<br>
-											</div>
+						<div class="form-control col-sm-3">
+							<a class="nav-link"
+								href="javascript:window.location='lossReportDashBoard'">
+								<div class="card" style="align-items: center;"
+									data-toggle="tooltip" data-placement="top"
+									title="View loss report for the selected month">
+									<i class="fas fa-newspaper fa-6x"></i>
+									
+									<div class="card-body">
+										<div class="app-title">
+											Loss Report<br>
 										</div>
 									</div>
-							</span></a>
+								</div>
+							</a>
+
 						</div>
-						<!-- 						<div class="form-control col-sm-4"> -->
-						<!-- 							<a class="nav-link" href="javascript:window.location='getReport'"> -->
-						<!-- 								<div class="card"> -->
-						<!-- 									<img class="card-img-top" -->
-						<%-- 										src="<c:url value='/static/img/tf1.jpg' />""> --%>
-						<!-- 									<div class="card-body"> -->
-						<!-- 										<div class="app-title">Reports (Sep 2018)</div> -->
-						<!-- 									</div> -->
-						<!-- 								</div> -->
-						<!-- 							</a> -->
-						<!-- 						</div> -->
 
-						<!-- 						<div class="form-control col-sm-4"> -->
-						<!-- 							<a class="nav-link" -->
-						<!-- 								href="javascript:window.location='getOctReport'"> -->
-						<!-- 								<div class="card"> -->
-						<!-- 									<img class="card-img-top" -->
-						<%-- 										src="<c:url value='/static/img/tf1.jpg' />""> --%>
-						<!-- 									<div class="card-body"> -->
-						<!-- 										<div class="app-title">Reports(Oct 2018)</div> -->
-						<!-- 									</div> -->
-						<!-- 								</div> -->
-						<!-- 							</a> -->
-						<!-- 						</div> -->
+					<!-- Column for tamper log -->
+					
+
+						<div class="form-control col-sm-3">
 
 
-						<div class="form-control col-sm-4">
-
-
-							<a href="#" role="button" class="nav-link btn popovers"
-								data-toggle="popover" title=""
-								data-content="<a href='getPendingLossReportLocation?month=6&year=2019' title='July'>July,2019</a>
-								<br><a href='getPendingLossReportLocation?month=5&year=2019' title='June'>June,2019</a>
-								<br>
-								<a href='getPendingLossReportLocation?month=4&year=2019' title='May'>May,2019</a>
-								"
-								data-original-title="Select Month"><span>
-									<div class="card" data-toggle="tooltip" data-placement="top"
-										title="Meters for which no data has been uploaded yet!">
-										<i class="fas fa-binoculars fa-5x"></i>
-
-										<div class="card-body">
-											<div class="app-title">
-												Pending Locations<br>
-											</div>
+							<a href="reportDashboard" class="nav-link">
+								<div class="card" style="align-items: center;"
+									data-toggle="tooltip" data-placement="top"
+									title="View Instant Register Details for the selected month">
+									<i class="far fa-newspaper fa-6x"></i>
+									
+									<div class="card-body">
+										<div class="app-title">
+											Reports<br>
 										</div>
 									</div>
-							</span></a>
+								</div>
+							</a>
 						</div>
-
-						<!-- 						<div class="form-control col-sm-4"> -->
-						<!-- 							<a class="nav-link" -->
-						<!-- 								href="javascript:window.location='getPendingLossReportLocation?month=8&year=2018'"> -->
-						<!-- 								<div class="card"> -->
-						<!-- 									<img class="card-img-top" -->
-						<%-- 										src="<c:url value='/static/img/tf1.jpg' />""> --%>
-						<!-- 									<div class="card-body"> -->
-						<!-- 										<div class="app-title">Pending Data(Sept)</div> -->
-						<!-- 									</div> -->
-						<!-- 								</div> -->
-						<!-- 							</a> -->
-						<!-- 						</div> -->
-
-
-						<!-- 						<div class="form-control col-sm-4"> -->
-						<!-- 							<a class="nav-link" -->
-						<!-- 								href="javascript:window.location='getPendingLossReportLocation?month=9&year=2018'"> -->
-						<!-- 								<div class="card"> -->
-						<!-- 									<img class="card-img-top" -->
-						<%-- 										src="<c:url value='/static/img/tf1.jpg' />""> --%>
-						<!-- 									<div class="card-body"> -->
-						<!-- 										<div class="app-title">Pending Data(Oct)</div> -->
-						<!-- 									</div> -->
-						<!-- 								</div> -->
-						<!-- 							</a> -->
-						<!-- 						</div> -->
+					
 
 					</sec:authorize>
 					<sec:authorize
 						access="hasAnyRole('ROLE_SS_AE','ROLE_SR_XEN','ROLE_SE')">
 
-						<div class="form-control col-sm-4">
+						<div class="form-control col-sm-3">
 							<a class="nav-link"
 								href="javascript:window.location='uploadZipPM'">
 								<div class="card" style="align-items: center;"
 									data-toggle="tooltip" data-placement="top"
 									title="Upload zip files generated by CMRI!">
-									<i class="fas fa-cloud-upload-alt fa-5x"></i>
+									<i class="fas fa-cloud-upload-alt fa-6x"></i>
 									<div class="card-body">
 										<div class="app-title">Upload File(s)</div>
 									</div>
@@ -326,13 +263,13 @@
 						</div>
 						<sec:authorize access="hasAnyRole('ROLE_SS_AE','ROLE_SR_XEN')">
 
-							<div class="form-control col-sm-4">
+							<div class="form-control col-sm-3">
 								<a class="nav-link"
 									href="javascript:window.location='substationHome?month=6&year=2019'">
 									<div class="card" style="align-items: center;"
 										data-toggle="tooltip" data-placement="top"
 										title="List of locations along with files uploaded in current month!">
-										<i class="fas fa-database fa-5x"></i>
+										<i class="fas fa-database fa-6x"></i>
 										<div class="card-body">
 											<div class="app-title">Substation File Master</div>
 										</div>
@@ -342,26 +279,7 @@
 
 						</sec:authorize>
 
-						<div class="form-control col-sm-4">
 
-							<a href="#" role="button" class="nav-link btn popovers"
-								data-toggle="popover" title=""
-								data-content="<a href='getPendingLossReportLocationPM?month=6&year=2019' title='July 2019'>July,2019</a>
-								<br><a href='getPendingLossReportLocationPM?month=5&year=2019' title='June 2019'>June,2019</a>
-								"
-								data-original-title="Select Month"><span>
-									<div class="card" data-toggle="tooltip" data-placement="top"
-										title="Meters for which no data has been uploaded yet!">
-										<i class="fas fa-binoculars fa-5x"></i>
-
-										<div class="card-body">
-											<div class="app-title">
-												Pending Locations<br>
-											</div>
-										</div>
-									</div>
-							</span></a>
-						</div>
 					</sec:authorize>
 
 					<!-- Column for tamper Log -->
@@ -369,65 +287,40 @@
 					<sec:authorize
 						access="hasAnyRole('ROLE_SLDC_USER','ROLE_SLDC_ADMIN')">
 
-						<div class="form-control col-sm-4">
+						<div class="form-control col-sm-3">
 
 
-							<a href="#" role="button" class="nav-link btn popovers"
-								data-toggle="popover" title=""
-								data-content="<a href='getTamperLossReport?month=6&year=2019' title='July 2019'>July,2019</a>
-								<br><a href='getTamperLossReport?month=5&year=2019' title='June 2019'>June,2019</a>
-								"
-								data-original-title="Select Month"><span>
-									<div class="card" data-toggle="tooltip" data-placement="top"
-										title="View Tamper loss report for the selected month">
-										<i class="fas fa-receipt fa-5x"></i>
+							<a href="lossReportLocations" class="nav-link"> 
+							<span>
+							<div class="card" style="align-items: center;"
+										data-toggle="tooltip" data-placement="top"
+										title="Configure Loss Report Location">
+										<i class="fas fa-tools fa-6x"></i>
 										<div class="card-body">
 											<div class="app-title">
-												Tamper Log Report<br>
+												Configuration<br>
 											</div>
 										</div>
-									</div>
-							</span></a>
+									</div></span>
+							</a>
 						</div>
 					</sec:authorize>
-					<!-- Column for tamper log -->
-					<sec:authorize
-						access="hasAnyRole('ROLE_SLDC_USER','ROLE_SLDC_ADMIN')">
 
-						<div class="form-control col-sm-4">
-
-
-							<a href="#" role="button" class="nav-link btn popovers"
-								data-toggle="popover" title=""
-								data-content="<a href='getIRDetails?month=6&year=2019' title='June 2019'>June,2019</a>
-								<br><a href='getIRDetails?month=7&year=2019' title='July 2019'>July,2019</a>
-								<br>"
-								data-original-title="Select Month"><span>
-									<div class="card" data-toggle="tooltip" data-placement="top"
-										title="View Instant Register Details for the selected month">
-										<i class="fas fa-receipt fa-5x"></i>
-										<div class="card-body">
-											<div class="app-title">
-												Instant Registers Details Report<br>
-											</div>
-										</div>
-									</div>
-							</span></a>
-						</div>
-					</sec:authorize>
 					<sec:authorize
 						access="hasAnyRole('ROLE_SLDC_USER','ROLE_SLDC_ADMIN')">
 
 
 
 
-						<div class="form-control col-sm-4">
+						<div class="form-control col-sm-3">
 							<a class="nav-link"
 								href="javascript:window.location='mappingHome'">
 								<div class="card" style="align-items: center;"
-									data-toggle="tooltip" data-placement="top"
+									style="align-items: center;" data-toggle="tooltip"
+									data-placement="top"
 									title="Add New Locations , Meters And locations for Report Calculations">
-									<i class="fas fa-cloud-upload-alt fa-5x"></i>
+									
+									<i class="fas fa-link fa-6x"></i>
 									<div class="card-body">
 										<div class="app-title">Meter Mappings</div>
 									</div>
@@ -442,45 +335,5 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			// sandbox disable popups
-			if (window.self !== window.top && window.name != "view1") {
-				;
-				window.alert = function() {/*disable alert*/
-				};
-				window.confirm = function() {/*disable confirm*/
-				};
-				window.prompt = function() {/*disable prompt*/
-				};
-				window.open = function() {/*disable open*/
-				};
-			}
-
-			// prevent href=# click jump
-			document.addEventListener("DOMContentLoaded", function() {
-				var links = document.getElementsByTagName("A");
-				for (var i = 0; i < links.length; i++) {
-					if (links[i].href.indexOf('#') != -1) {
-						links[i].addEventListener("click", function(e) {
-							console.debug("prevent href=# click");
-							if (this.hash) {
-								if (this.hash == "#") {
-									e.preventDefault();
-									return false;
-								} else {
-									/*
-									var el = document.getElementById(this.hash.replace(/#/, ""));
-									if (el) {
-									  el.scrollIntoView(true);
-									}
-									 */
-								}
-							}
-							return false;
-						})
-					}
-				}
-			}, false);
-		</script>
 </body>
 </html>

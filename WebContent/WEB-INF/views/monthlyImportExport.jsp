@@ -18,7 +18,7 @@
 <title>Energy Meters</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<%@include file="dataTablesHeader.jsp"%>
 
@@ -182,7 +182,7 @@
 					<td style="width: 150px;">Name of the Feeder/Transformer</td>
 					<c:forEach items="${monthlyDataModel.locationList}"
 						var="meterLocation" varStatus="indexStatus">
-						<td>${meterLocation.feederMaster.feederName}</td>
+						<td>${meterLocation.feederName}</td>
 						<td></td>
 					</c:forEach>
 				</tr>
@@ -381,7 +381,7 @@
 					<td style="width: 150px;">Name of the Feeder/Transformer</td>
 					<c:forEach items="${monthlyDataModel.locationList}"
 						var="meterLocation" varStatus="indexStatus">
-						<td colspan="2">${meterLocation.feederMaster.feederName}</td>
+						<td colspan="2">${meterLocation.feederName}</td>
 					</c:forEach>
 				</tr>
 				<tr>

@@ -1,7 +1,7 @@
 package org.pstcl.ea.converters;
 
-import org.pstcl.ea.dao.MontlyReportLocationsDao;
-import org.pstcl.ea.entity.mapping.ReportLocationsMonthMap;
+import org.pstcl.ea.dao.MapMonthLossReportLocationDao;
+import org.pstcl.ea.entity.mapping.MapMonthLossReportLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,18 +9,18 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MapReportLocationsConverter implements Converter<String,ReportLocationsMonthMap>{
+public class MapReportLocationsConverter implements Converter<String,MapMonthLossReportLocation>{
 
 	
 	static final Logger logger;
 	@Autowired 
-	MontlyReportLocationsDao service; 
+	MapMonthLossReportLocationDao service; 
 	
 	static {
 		logger = LoggerFactory.getLogger((Class) MapReportLocationsConverter.class);
 	}
 	
-	public ReportLocationsMonthMap convert(final String code) {
+	public MapMonthLossReportLocation convert(final String code) {
 		BoundaryTypeConverter.logger.info("Profile : {}", (Object) code);
 		if(code.equalsIgnoreCase(""))
 		{

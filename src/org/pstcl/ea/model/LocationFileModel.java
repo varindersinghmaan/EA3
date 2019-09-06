@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.entity.LocationMaster;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 
 public class LocationFileModel {
 	
 	private LocationMaster locationMaster;
 	private List<FileMaster> fileMasters;
-	private List<MeterLocationMap> meterLocationMaps;
+	private List<MapMeterLocation> meterLocationMaps;
 	private Date startDate;
 	private Date endDate;
 	
@@ -40,10 +40,10 @@ public class LocationFileModel {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	public List<MeterLocationMap> getMeterLocationMaps() {
+	public List<MapMeterLocation> getMeterLocationMaps() {
 		return meterLocationMaps;
 	}
-	public void setMeterLocationMaps(List<MeterLocationMap> meterLocationMaps) {
+	public void setMeterLocationMaps(List<MapMeterLocation> meterLocationMaps) {
 		this.meterLocationMaps = meterLocationMaps;
 	}
 

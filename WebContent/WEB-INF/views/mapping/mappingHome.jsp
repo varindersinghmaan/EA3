@@ -16,7 +16,7 @@
 <meta charset="ISO-8859-1">
 <title>Add Mappings</title>
 </head>
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 
 	<%@include file="../authheader.jsp"%>
 
@@ -105,7 +105,7 @@
 								<td>${location.substationMaster.stationName}</td>
 
 								<td>${location.locationId }</td>
-								<td>${location.feederMaster.feederName}</td>
+								<td>${location.feederName}</td>
 								<td>${location.boundaryTypeMaster.boundaryType}</td>
 									<td><a class="btn btn-primary"
 						href="changeLocationEmf?locationId=${location.locationId}">Edit

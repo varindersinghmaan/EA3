@@ -61,6 +61,7 @@ public class DailyTxnController {
 
 
 	//Save all meters data
+	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
 	@RequestMapping(value = {"/saveDailyTxSS"}, method = {RequestMethod.POST})
 	public String saveDailyTxSS(LocationSurveyDataModel dailyTransactionModel, BindingResult result, ModelMap model) {
 		dailyTxnService.saveDailyTransactions(dailyTransactionModel);

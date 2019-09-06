@@ -18,7 +18,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.MeterMaster;
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.util.EAUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -81,7 +81,7 @@ public class DailyTransactionMappedSuper {
 	@JsonIgnore
 	@ManyToOne (fetch=FetchType.LAZY)
 	@JoinColumn(name = "METER_LOC_MAP_ID")
-	private MeterLocationMap meterLocationMap;
+	private MapMeterLocation meterLocationMap;
 
 
 
@@ -192,7 +192,7 @@ public class DailyTransactionMappedSuper {
 
 
 
-	public MeterLocationMap getMeterLocationMap() {
+	public MapMeterLocation getMeterLocationMap() {
 		return meterLocationMap;
 	}
 	public Integer getMonthOfYear() {
@@ -307,7 +307,7 @@ public class DailyTransactionMappedSuper {
 	public void setMeter(MeterMaster meter) {
 		this.meter = meter;
 	}
-	public void setMeterLocationMap(MeterLocationMap meterLocationMap) {
+	public void setMeterLocationMap(MapMeterLocation meterLocationMap) {
 		this.meterLocationMap = meterLocationMap;
 	}
 	public void setMonthOfYear(Integer monthOfYear) {
@@ -359,75 +359,41 @@ public class DailyTransactionMappedSuper {
 
 
 	public void updateValues(DailyTransactionMappedSuper dailyTransaction) {
-		if(null!=dailyTransaction.importWHF)
-		{
-			this.importWHF =dailyTransaction.importWHF;
-		}
-		if(null!=dailyTransaction.exportWHF)
-		{
-			this.exportWHF =dailyTransaction.exportWHF;
-		}
-		if(null!=dailyTransaction.importBoundaryPtMWH)
-		{
-		
-		this.importBoundaryPtMWH=dailyTransaction.importBoundaryPtMWH;
-		}
-		if(null!=dailyTransaction.exportBoundaryPtMWH)
-		{
-		
-		this.exportBoundaryPtMWH=dailyTransaction.exportBoundaryPtMWH;
-		}
-		this.meter=dailyTransaction.meter;
-		this.externalMF=dailyTransaction.externalMF;
-		this.netWHSign=dailyTransaction.netWHSign;
-		this.recordNo=dailyTransaction.recordNo;
-		this.cumulativeNetWh=dailyTransaction.cumulativeNetWh;
-		this.fileName=dailyTransaction.fileName;
-		
-		
-		
-	//	this.netEnergyMWH =dailyTransaction.netEnergyMWH;
-		this.transactionStatus =dailyTransaction.transactionStatus;
+		this.boundaryPtImportExportDifferenceMWH =dailyTransaction.boundaryPtImportExportDifferenceMWH;
+		this.cumulativeNetWh =dailyTransaction.cumulativeNetWh;
+		this.dayOfMonth =dailyTransaction.dayOfMonth;
+		this.exportBoundaryPtMWH =dailyTransaction.exportBoundaryPtMWH;
+		this.exportWHF =dailyTransaction.exportWHF;
+		this.externalMF =dailyTransaction.externalMF;
+		this.externalMFMap =dailyTransaction.externalMFMap;
+		this.fileName =dailyTransaction.fileName;
+		this.netWHSign =dailyTransaction.netWHSign;
+		this.importBoundaryPtMWH =dailyTransaction.importBoundaryPtMWH;
+		this.importWHF =dailyTransaction.importWHF;
+		this.location =dailyTransaction.location;
+		this.meter =dailyTransaction.meter;
+		this.meterLocationMap =dailyTransaction.meterLocationMap;
+		this.monthOfYear =dailyTransaction.monthOfYear;
+		this.netMWH =dailyTransaction.netMWH;
+		this.recordNo =dailyTransaction.recordNo;
 		this.remarks =dailyTransaction.remarks;
+		this.transactionDate =dailyTransaction.transactionDate;
+		this.transactionStatus =dailyTransaction.transactionStatus;
+		this.year =dailyTransaction.year;
+		
 	}
+	
+	
 
 
 
 	
 
 
-	public DailyTransactionMappedSuper() {
-		super();
-	}
 
 
 
-	public DailyTransactionMappedSuper(DailyTransactionMappedSuper superInstance) {
-		super();
-		this.boundaryPtImportExportDifferenceMWH =superInstance.boundaryPtImportExportDifferenceMWH;
-		this.createDateTime =superInstance.createDateTime;
-		this.cumulativeNetWh =superInstance.cumulativeNetWh;
-		this.dayOfMonth =superInstance.dayOfMonth;
-		this.exportBoundaryPtMWH =superInstance.exportBoundaryPtMWH;
-		this.exportWHF =superInstance.exportWHF;
-		this.externalMF =superInstance.externalMF;
-		this.externalMFMap =superInstance.externalMFMap;
-		this.fileName =superInstance.fileName;
-		this.netWHSign =superInstance.netWHSign;
-		this.importBoundaryPtMWH =superInstance.importBoundaryPtMWH;
-		this.importWHF =superInstance.importWHF;
-		this.location =superInstance.location;
-		this.meter =superInstance.meter;
-		this.meterLocationMap =superInstance.meterLocationMap;
-		this.monthOfYear =superInstance.monthOfYear;
-		this.netMWH =superInstance.netMWH;
-		this.recordNo =superInstance.recordNo;
-		this.remarks =superInstance.remarks;
-		this.transactionDate =superInstance.transactionDate;
-		this.transactionStatus =superInstance.transactionStatus;
-		this.txnId =superInstance.txnId;
-		this.updateDateTime =superInstance.updateDateTime;
-		this.year =superInstance.year;	}
+	
 
 
 	

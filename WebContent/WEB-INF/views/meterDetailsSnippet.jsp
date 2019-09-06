@@ -31,7 +31,7 @@
 	<tr>
 		<th>Feeder Name</th>
 
-		<td>${location.locationMaster.feederMaster.feederName}</td>
+		<td>${location.locationMaster.feederName}</td>
 	</tr>
 
 	<tr>

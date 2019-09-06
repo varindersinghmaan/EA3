@@ -54,6 +54,7 @@
 
 	</div>
 	<div class="card">
+	<c:if test="${locationSurveyDataModel.locationMaster ne null}">
 	<sec:authorize
 						access="hasAnyRole('ROLE_SLDC_ADMIN')">
 						<a title="${locationSurveyDataModel.locationMaster.locationId}"
@@ -63,6 +64,7 @@
 							href="javascript:window.location='createDailyFromLoadSurveyData-${locationSurveyDataModel.locationMaster.locationId}?month=${month}&year=${year}'">
 							Substitute With Load Survey Data </a>
 					</sec:authorize>
+					</c:if>
 	</div>
 
 	<div class="row">

@@ -13,7 +13,7 @@ import org.pstcl.ea.dao.IMeterMasterDao;
 import org.pstcl.ea.entity.EAUser;
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.MeterMaster;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.model.EAFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,7 +153,7 @@ public class MeterMasterDaoImpl extends AbstractDaoSLDC<String, MeterMaster> imp
 
 @Override
 public List<MeterMaster> findMeterWithNoMapping(){
-	Criteria critLocationList = getSession().createCriteria(MeterLocationMap.class);
+	Criteria critLocationList = getSession().createCriteria(MapMeterLocation.class);
 	critLocationList.add(Restrictions.isNull("endDate"));
 	critLocationList.setProjection(Projections.projectionList().add(Projections.distinct(Projections.property("meterMaster.meterSrNo"))) );
     List <String> meterSrNo = critLocationList.list();

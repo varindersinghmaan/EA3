@@ -69,7 +69,7 @@
 									</td>
 									<td>${location.meterMaster.meterSrNo}</td>
 									<td>${location.meterMaster.meterType}</td>
-									<td>${location.locationMaster.feederMaster.feederName}</td>
+									<td>${location.locationMaster.feederName}</td>
 									<td>${location.locationMaster.boundaryTypeMaster.boundaryType}</td>
 									<td><fmt:formatDate value="${location.startDate}"
 											pattern="yyyy-MM-dd" /></td>

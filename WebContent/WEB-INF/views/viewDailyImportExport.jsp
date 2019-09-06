@@ -27,7 +27,7 @@
 <title>Energy Meters</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -83,7 +83,7 @@
 								</div>
 								<div class="col-2">
 									<div class="app-title row">Meter Location</div>
-									<div class="sub-title row">Feeder:${dailyTransactionForMeter.location.feederMaster.feederName}
+									<div class="sub-title row">Feeder:${dailyTransactionForMeter.location.feederName}
 									</div>
 									<div class="sub-title row">Boundary
 										Type:${dailyTransactionForMeter.location.boundaryTypeMaster.boundaryType}
@@ -190,7 +190,7 @@
 										<tr>
 											<th>Feeder Name</th>
 
-											<td>${dailyTransactionForMeter.location.feederMaster.feederName}</td>
+											<td>${dailyTransactionForMeter.location.feederName}</td>
 										</tr>
 
 										<tr>

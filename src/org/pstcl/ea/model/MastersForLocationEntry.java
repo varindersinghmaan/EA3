@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.pstcl.ea.entity.BoundaryTypeMaster;
 import org.pstcl.ea.entity.DeviceTypeMaster;
-import org.pstcl.ea.entity.FeederMaster;
 
 public class MastersForLocationEntry {
 
 	
 	private List<BoundaryTypeMaster> boundaryTypeMaster;
 	private List<String> utiltiyName;
-	private List<FeederMaster> feederMaster;
+
+
 	private List<String> voltageLevel;
 	private List<DeviceTypeMaster> deviceTypeMaster;
 	
@@ -49,12 +49,7 @@ public class MastersForLocationEntry {
 	public void setUtiltiyName(List<String> utiltiyName) {
 		this.utiltiyName = utiltiyName;
 	}
-	public List<FeederMaster> getFeederMaster() {
-		return feederMaster;
-	}
-	public void setFeederMaster(List<FeederMaster> feederMaster) {
-		this.feederMaster = feederMaster;
-	}
+	
 	public List<String> getVoltageLevel() {
 		return voltageLevel;
 	}

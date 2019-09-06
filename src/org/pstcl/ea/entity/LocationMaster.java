@@ -44,7 +44,6 @@ public class LocationMaster implements Serializable {
 
 
 
-	private FeederMaster feederMaster;
 
 
 	private int id;
@@ -116,12 +115,6 @@ public class LocationMaster implements Serializable {
 	
 
 
-	//bi-directional many-to-one association to FeederMaster
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="FEEDER_CODE")
-	public FeederMaster getFeederMaster() {
-		return this.feederMaster;
-	}
 
 
 	@Column(nullable=false)
@@ -221,11 +214,9 @@ public class LocationMaster implements Serializable {
 	}
 
 	
+	private String feederName;
 
 
-	public void setFeederMaster(FeederMaster feederMaster) {
-		this.feederMaster = feederMaster;
-	}
 
 	public void setId(int id) {
 		this.id = id;
@@ -286,15 +277,15 @@ public class LocationMaster implements Serializable {
 		this.voltageLevel = voltageLevel;
 	}
 
-	@Transient
-	public String getMeterCategory() {
-		// TODO Auto-generated method stub
-		return "cat";
+	
+
+	@Column(length=45)
+	public String getFeederName() {
+		return feederName;
 	}
-	@Transient
-	public String getMeterType()
-	{
-		return "type";
+
+	public void setFeederName(String feederName) {
+		this.feederName = feederName;
 	}
 
 	

@@ -13,7 +13,7 @@ import org.pstcl.ea.entity.EAUser;
 import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.MeterMaster;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.model.FileFilter;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
@@ -183,7 +183,7 @@ public class FileMasterDaoImpl extends AbstractDaoSLDC<Integer, FileMaster> impl
 	
 	private List <String> getLocationsMeterList(FileFilter filter)
 	{
-		Criteria critMap = getSession().createCriteria(MeterLocationMap.class);
+		Criteria critMap = getSession().createCriteria(MapMeterLocation.class);
 		critMap.setProjection(Projections.property("meterMaster.meterSrNo"));
 
 		List <String> meterIdsList=null;

@@ -27,4 +27,7 @@ public interface IlossReportService {
 	ConsolidatedLossReportModel getConsolidatedMonthlyLossReport(int month, int year, Boolean initialiseLazy);
 
 
+	ReportParametersModel initialiseMonthYear(ReportParametersModel parametersModel);
+
+
 }

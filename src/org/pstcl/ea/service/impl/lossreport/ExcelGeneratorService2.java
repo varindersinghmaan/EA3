@@ -338,6 +338,7 @@ public class ExcelGeneratorService2 {
 
 	private void createLossReportCriteriaSheet(Workbook workbook, LossReportModel lossReportModel) {
 		// TODO Auto-generated method stub
+		
 		Sheet sheet = workbook.createSheet(lossReportModel.getCriteria().replace('/', '_'));
 
 		Integer rowNumber = 5;
@@ -385,7 +386,7 @@ public class ExcelGeneratorService2 {
 				cell.setCellValue(locationMaster.getSubstationMaster().getStationName());
 				cell = row.createCell(cellnumber++);
 				cell.setCellStyle(getNormalStyle(sheet));
-				cell.setCellValue(locationMaster.getFeederMaster().getFeederName());
+				cell.setCellValue(locationMaster.getFeederName());
 				cell = row.createCell(cellnumber++);
 				cell.setCellStyle(getNormalStyle(sheet));
 				cell.setCellValue(locationMaster.getVoltageLevel());

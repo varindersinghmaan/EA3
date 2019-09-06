@@ -28,14 +28,16 @@ body {
 {
 	
 }
+
+
 a {
-	color: #0080c0;
+	color: #155592;
 	text-decoration: none;
 	background-color: transparent
 }
 
 a:hover {
-	color: #0080ff;
+	color: #4b6d57;
 	text-decoration: underline
 }
 input:invalid {
@@ -92,14 +94,27 @@ input:invalid {
 .nav {
   background-color:#bdc3c7;
 }
-
+nav {
+    .fixed-top: ;
+    background: #155592;
+    
+}
+.navbar-light .navbar-text {
+    color: White;
+}
+.navbar-brand
+{
+	background-color: white;
+	margin: 10px 10px 10px 10px;
+	padding: 10px 10px 10px 10px;
+}
 .navbar-light .navbar-nav .nav-link {
-  color: rgba(7, 63, 247, 0.5);
+  color: #6c757d;
 }
 
 .navbar-nav .nav-link {
   background: #f3f4f5;
-  color: rgb(99, 10, 243);
+  color: #6c757d;
 }
 .navbar-nav .nav-link {
   padding-right: 2px;
@@ -108,4 +123,24 @@ input:invalid {
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
+}
+.btn-secondary {
+    color: #fff;
+    background-color:#004080;
+    border-color: #6c757d;
+}
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+    color: #fff;
+    background-color:  #1d6cb3;
+    border-color: #004080;
+}
+.btn-primary {
+    color: #fff;
+    background-color:#367081;
+    border-color: #6c757d;
+}
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color:  #1d6cb3;
+    border-color: #004080;
 }

@@ -8,7 +8,7 @@
 <meta charset="ISO-8859-1">
 <title>Location Details</title>
 </head>
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="../authheader.jsp"%>
 
 	<%@include file="../dataTablesHeader.jsp"%>
@@ -43,8 +43,7 @@
 			showProgressBar();
 
 			$('#reportDiv').css('display', 'none');
-			$('#loader').css('display', 'block');
-
+			
 			if ($("#reportDate").val() == "") {
 				var newdate = new Date();
 				newdate.setDate(new Date().getDate() - 15); // minus the date
@@ -88,8 +87,6 @@
 
 					$('#reportDiv').css('display', 'block');
 					hideProgressBar();
-
-					$('#loader').css('display', 'none');
 
 				},
 				error : function(data, status, er) {
@@ -214,7 +211,7 @@
 								<tr>
 									<th>Feeder Name</th>
 
-									<td>${location.feederMaster.feederName}</td>
+									<td>${location.feederName}</td>
 								</tr>
 
 								<tr>
@@ -429,14 +426,14 @@
 									Boundary
 									<div id="intervalDiv" class="btn-group btn-group-toggle"
 										data-toggle="buttons">
-										<label class="btn btn-primary"> <input type="radio"
+										<label class="btn btn-secondary"> <input type="radio"
 											name="reportType" id="option3" value="" autocomplete="off"
 											checked="checked">Energy Import Export
-										</label> <label class="btn btn-primary"> <input type="radio"
+										</label> <label class="btn btn-secondary"> <input type="radio"
 											name="reportType" id="option3"
 											value="<%=EAUtil.EA_LOCATION_REPORT_TAMPERS%>" autocomplete="off">
 											Tampers
-										</label> <label class="btn btn-primary"> <input type="radio"
+										</label> <label class="btn btn-secondary"> <input type="radio"
 											name="reportType" id="option3"
 											value="<%=EAUtil.EA_LOCATION_REPORT_INSTANT_REGISTERS%>"
 											autocomplete="off"> Instant Registers
@@ -452,7 +449,7 @@
 										id="loadReportButton" value="Load Report"
 										class="btn btn-primary btn-sm" /> <a
 										class="btn btn-light btn-sm float-right"
-										href="javascript:window.location='lossReportDyn'"><span
+										href="javascript:window.location='locationHome'"><span
 										class="glyphicon glyphicon-plus"></span>Clear</a>
 								</div>
 

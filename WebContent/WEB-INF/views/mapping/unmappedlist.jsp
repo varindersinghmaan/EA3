@@ -49,7 +49,7 @@
 <title>Sub Station Master</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="../authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">

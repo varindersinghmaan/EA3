@@ -55,7 +55,7 @@ public class LocationMasterService {
 		LocationMaster entity=locationMasterDao.findById(locationMaster.getLocationId());
 		if(entity!=null) 
 		{
-			entity.setFeederMaster(locationMaster.getFeederMaster());
+			entity.setFeederName(locationMaster.getFeederName());
 			entity.setBoundaryTypeMaster(locationMaster.getBoundaryTypeMaster());
 			entity.setDeviceTypeMaster(locationMaster.getDeviceTypeMaster());
 			entity.setUtiltiyName(locationMaster.getUtiltiyName());

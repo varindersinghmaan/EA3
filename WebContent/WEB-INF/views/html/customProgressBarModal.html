@@ -9,9 +9,23 @@ function showProgressBar() {
 function hideProgressBar () {
     $("#exampleModal").modal('hide');
  }
+ 
+var customModal;
+customModal = customModal
+		|| (function() {
+			var pleaseWaitDiv = $('<div class="modal hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"><div class="modal-header"><h1>Processing...</h1></div><div class="modal-body"><div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div></div></div>');
+			return {
+				showPleaseWait : function() {
+					pleaseWaitDiv.modal();
+				},
+				hidePleaseWait : function() {
+					pleaseWaitDiv.modal('hide');
+				},
 
-
+			};
+		})();
 </script>
+
 
 <!-- Modal -->
 <div class="modal fadeIn fadeOut" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

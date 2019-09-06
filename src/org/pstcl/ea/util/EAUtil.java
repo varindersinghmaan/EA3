@@ -37,6 +37,7 @@ public class EAUtil {
 
 	public static final int DECIMAL_SCALE_LOSS_PERCENTAGE=4;
 
+
 	//	public static String CRMI_TXT_FILE_REPOSITORY="C:\\Eclipse\\temporary_old_EAP_code\\src\\CMRI_TXT_FILE_REPOSITORY\\";
 	//	public static String CRMI_ZIP_FILE_REPOSITORY="C:\\Eclipse\\temporary_old_EAP_code\\src\\CMRI_ZIP_FILE_REPOSITORY\\";
 	//	public static String TEMP_FILE_OPEN_DIR="C:\\Eclipse\\temporary_old_EAP_code\\src\\TEMP\\";
@@ -62,11 +63,18 @@ public class EAUtil {
 	public static String EA_LOCATION_REPORT_ENERGY_IE= "EA_LOCATION_REPORT_ENERGY_IE";
 	public static String EA_LOCATION_REPORT_TAMPERS= "EA_LOCATION_REPORT_TAMPERS";
 	public static String EA_LOCATION_REPORT_INSTANT_REGISTERS= "EA_LOCATION_REPORT_INSTANT_REGISTERS";
-	
-	public static String EA_MONTHLY_REPORT_ENERGY_IE= "EA_MONTHLY_REPORT_ENERGY_IE";
-	public static String EA_MONTHLY_REPORT_TAMPERS= "EA_MONTHLY_REPORT_TAMPERS";
-	public static String EA_MONTHLY_REPORT_INSTANT_REGISTERS= "EA_MONTHLY_REPORT_INSTANT_REGISTERS";
 
+	public static Integer EA_MONTHLY_REPORT_PENDING_METERS= 2500;
+	public static Integer EA_MONTHLY_REPORT_ENERGY_IE= 2600;
+	public static Integer EA_MONTHLY_REPORT_TAMPERS= 2700;
+	public static Integer EA_MONTHLY_REPORT_TAMPER_COUNT= 2800;
+	public static Integer EA_MONTHLY_REPORT_INSTANT_REGISTERS= 2900;
+
+	public static final Integer EA_MONTHLY_REPORT_ALL_FILES = 5000;
+	public static final Integer EA_MONTHLY_PENDING_FILES = 6000;
+	public static final Integer EA_MONTHLY_FILES_ACTION = 7500;
+	
+	
 	public static Integer FILE_DAILY_RECORD_COUNT_HEALTHY=	45;	
 	public static Integer FILE_LOAD_SURVEY_RECORD_COUNT_HEALTHY=	4320;	
 
@@ -77,7 +85,8 @@ public class EAUtil {
 
 	public static String DAILY_TRANSACTION_ENTERED_MANUALLY="DAILY_TRANSACTION_ENTERED_MANUALLY";
 	public static String DAILY_TRANSACTION_FROM_LOAD_SURVEY="DAILY_TRANSACTION_FROM_LOAD_SURVEY";
-
+	
+	public static String EA_ACTION_PROCESS_FILES= "PROCESS_REPO_FILES___ACTION";
 
 
 
@@ -147,6 +156,7 @@ public class EAUtil {
 
 	public static Integer DAILY_TRANSACTION_ADDED_MANUALLY=500;
 	public static Integer DAILY_TRANSACTION_MODFIED_DUE_TO_METER_MAPPING=550;
+	public static Integer DAILY_TRANSACTION_REMOVED_DUE_TO_METER_MAPPING=575;
 	public static Integer DAILY_TRANSACTION_CALC_FROM_LOAD_SURVEY=600;
 	public static Integer DAILY_TRANSACTION_MODFIED_DUE_TO_MF_MAPPING=650;
 	

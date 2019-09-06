@@ -423,16 +423,6 @@ public class TamperLogDaoImpl  implements ITamperLogDao {
 
 
 		List<TamperLogTransaction> results=criteria.list();
-		
-		
-//		@SuppressWarnings("unchecked")
-//		List<TamperLogTransaction> totalAll = criteria
-//		.setProjection(Projections.projectionList()
-//				.add(Projections.sum("exportWHF"), "exportWHF")
-//				.add(Projections.sum("importWHF"), "importWHF"))
-//		.setResultTransformer(Transformers.aliasToBean(TamperLogTransaction.class)).list();
-//		results.addAll(totalAll);
-
 		return results;
 	}
     

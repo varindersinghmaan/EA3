@@ -32,7 +32,7 @@ public class InstantRegistersDaoImpl implements IInstantRegistersDao{
 		Session s = null;
 		while(falseSession) {
 			try {
-				s = sessionFactory.getCurrentSession();
+				s = sessionFactory.openSession();
 				falseSession=false;
 			}
 			catch(Exception e) {
@@ -159,74 +159,7 @@ public class InstantRegistersDaoImpl implements IInstantRegistersDao{
 		session.close();
 	}
 
-	@Override
-	public void save(List<InstantRegisters> instantRegisters, EAUser loggedInUser) {
-		Session session=sessionFactory.openSession();
-		Transaction transaction=session.beginTransaction();
-		for (InstantRegisters instantRegister : instantRegisters) {
-			try
-			{
-				if (null != instantRegister) {
-					session.save(instantRegister);
-				}
 
-			}
-			catch(ConstraintViolationException dupExp)
-			{
-				transaction.rollback();
-				session.close();
-				saveOrUpdateInCaseDuplicateException(instantRegisters, loggedInUser);
-				return;
-			}
-			catch (Exception e) {
-				transaction.rollback();
-				session.close();
-				saveOrUpdateInCaseDuplicateException(instantRegisters, loggedInUser);
-				return;
-			}
-		}
-		transaction.commit();
-		session.close();
-	}
-
-
-	private void saveOrUpdateInCaseDuplicateException(List<InstantRegisters> instantRegisters, EAUser loggedInUser) {
-		// TODO Auto-generated method stub
-		Session session=sessionFactory.openSession();
-		Transaction transaction=session.beginTransaction();
-		for (InstantRegisters instantRegister : instantRegisters) {
-			try
-			{
-				Criteria crit = session.createCriteria(InstantRegisters.class);
-				crit.add(Restrictions.eq("location.locationId", instantRegister.getLocation().getLocationId()));
-				crit.add(Restrictions.eq("transactionDate",instantRegister.getTransactionDate()));
-				InstantRegisters entity =(InstantRegisters) crit.uniqueResult();
-				if (null != entity) {
-					entity.updateValues(instantRegister);
-					session.update(entity);
-				}
-				else
-				{
-					session.save(instantRegister);
-				}
-
-			}
-			catch(ConstraintViolationException dupExp)
-			{
-				System.out.println(dupExp.getClass());
-				transaction.rollback();
-				session.close();
-				return;
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		}
-		transaction.commit();
-		session.close();
-
-	}
 
 
 
@@ -287,7 +220,7 @@ public class InstantRegistersDaoImpl implements IInstantRegistersDao{
 
 		@Override
 		@Transactional(value="sldcTxnManager")
-		public List<InstantRegisters> findAllByMonthAndLocation(Integer month,Integer year) {
+		public List<InstantRegisters> findAllByMonth(Integer month,Integer year) {
 			List<InstantRegisters> irList=null;
 			try {
 				Date startDate=DateUtil.startDateTimeForDailySurveyRecs(month, year);

@@ -9,7 +9,6 @@ import org.pstcl.ea.dao.ILoadSurveyTransactionDao;
 import org.pstcl.ea.dao.ILocationMasterDao;
 import org.pstcl.ea.dao.ILossReportDao;
 import org.pstcl.ea.dao.IMeterMasterDao;
-import org.pstcl.ea.dao.IMonthlyTransactionDao;
 import org.pstcl.ea.dao.ITamperLogDao;
 import org.pstcl.ea.dao.SubstationUtilityDao;
 import org.pstcl.ea.entity.EAUser;
@@ -21,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public abstract class EnergyAccountsService {
+public abstract class EnergyAccountsService extends DateServiceUtil {
 
 	@Autowired
 	protected SubstationUtilityDao substationUtilityDao;
@@ -39,8 +38,7 @@ public abstract class EnergyAccountsService {
 	@Autowired
 	protected ILossReportDao lossReportDao;
 	
-	@Autowired
-	protected IMonthlyTransactionDao monthlyTransactionDao;
+
 	@Autowired
 	protected IMeterMasterDao meterDao;
 	

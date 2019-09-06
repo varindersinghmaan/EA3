@@ -49,7 +49,7 @@
 <title>Energy Meters</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -131,7 +131,7 @@
 									<img class="row card-img-report"
 										src="<c:url value='/static/img/meter1.jpg' />" alt="Equipment">
 									<div class="sub-title row">Bay
-										:${dailyTransactionForMeter.location.feederMaster.feederName}&nbsp;&nbsp;(${dailyTransactionForMeter.location.boundaryTypeMaster.boundaryType})
+										:${dailyTransactionForMeter.location.feederName}&nbsp;&nbsp;(${dailyTransactionForMeter.location.boundaryTypeMaster.boundaryType})
 									</div>
 									<div class="sub-title row">
 										Make:${dailyTransactionForMeter.location.meterMaster.meterType}
@@ -356,7 +356,7 @@
 										<tr>
 											<th>Feeder Name</th>
 
-											<td>${dailyTransactionForMeter.location.feederMaster.feederName}</td>
+											<td>${dailyTransactionForMeter.location.feederName}</td>
 										</tr>
 
 										<tr>

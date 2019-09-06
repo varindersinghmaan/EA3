@@ -12,6 +12,58 @@
 <html>
 
 <head>
+
+<c:set var="ctx" value="${pageContext.servletContext.contextPath}" />
+<script type="text/javascript">
+	function connect() {
+
+		var socket = new SockJS('${ctx}/gs-guide-websocket');
+		stompClient = Stomp.over(socket);
+		stompClient.connect({}, function(frame) {
+			setConnected(true);
+			console.log('Connected: ' + frame);
+			stompClient.subscribe('/topic/fileUploadingStatus', function(
+					greeting) {
+				showGreeting(JSON.parse(greeting.body).content);
+			});
+		});
+	}
+
+	var stompClient = null;
+
+	function setConnected(connected) {
+
+		if (connected) {
+			$("#conversation").show();
+		} else {
+			$("#conversation").hide();
+		}
+		$("#greetings").html("");
+	}
+
+	function disconnect() {
+		if (stompClient !== null) {
+			stompClient.disconnect();
+		}
+		setConnected(false);
+		console.log("Disconnected");
+	}
+
+	function sendName() {
+		stompClient.send("/app/hello", {}, JSON.stringify({
+			'name' : $("#name").val()
+		}));
+	}
+
+	function showGreeting(message) {
+
+		//$("<tr><td>prependTo</td></tr>").prependTo("table > tbody");
+		$("#greetings").prepend("<tr><td>" + new Date() + "</td><td>" + message + "</td></tr>");
+		$("<tr><td>" + message + "</td></tr>").insertBefore('"#greetings" > tr:first');
+	}
+</script>
+
+
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -28,7 +80,7 @@
 <title>Energy Meters</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -44,12 +96,8 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 
-			$('.modal-content').resizable({
-				//alsoResize: ".modal-dialog",
-				minHeight : 300,
-				minWidth : 600
-			});
-			$('.modal-dialog').draggable();
+			connect();
+			
 		});
 	</script>
 	<script type="text/javascript">
@@ -105,5 +153,33 @@
 	</div>
 
 
+<noscript>
+	<h2 style="color: #ff0000">Seems your browser doesn't support
+		Javascript! Websocket relies on Javascript being enabled. Please
+		enable Javascript and reload this page!</h2>
+</noscript>
+<div class="container">
+
+	
+	<div id="main-content" class="container">
+		
+		<div class="row">
+			<div class="col-md-12">
+				<table id="conversation" class="table table-striped">
+					<thead>
+						<tr>
+							<th><span class="lead">File uploading status will appear here</span> </th>
+						</tr>
+					</thead>
+					<tbody id="greetings">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+
+</div>
 </body>
 </html>

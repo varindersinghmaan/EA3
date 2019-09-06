@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.pstcl.ea.entity.EAUser;
 import org.pstcl.ea.entity.FileMaster;
+import org.pstcl.ea.messaging.OutputMessage;
 import org.pstcl.ea.model.CMRIFileDataModel;
 import org.pstcl.ea.model.FileModel;
 import org.pstcl.ea.security.UserRole;
@@ -18,10 +19,12 @@ import org.pstcl.ea.service.impl.parallel.DataService;
 import org.pstcl.ea.util.EAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.task.TaskExecutor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 @Service("uploadingService")
 public class UploadingService extends FileServiceUtil {
@@ -42,62 +45,17 @@ public class UploadingService extends FileServiceUtil {
 
 
 
-	//	public CMRIDataModel processUploadedFile(FileModel fileModel) {
-	//
-	//		MultipartFile multipartFile = fileModel.getFile();
-	//		String oldFileName = multipartFile.getOriginalFilename();
-	//		String newFileName = new Date().getMonth() + "_" + new Date().getYear() + "_"
-	//				+ multipartFile.getOriginalFilename();
-	//
-	//		File file = new File(EAUtil.CRMI_TXT_FILE_REPOSITORY + newFileName);
-	//		try {
-	//			FileCopyUtils.copy(multipartFile.getBytes(), file);
-	//
-	//		} catch (IOException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}
-	//
-	//		return processTXTFile(file);
-	//	}
-
-	//	public FileModel processZipUploadedFile(FileModel fileModel) {
-	//
-	//		// File sourceZip = new File("D:\\METER_DATA\\CMRI_TEST_ZIP\\01130158.zip");
-	//
-	//		File zipUploaded=null;
-	//		
-	//		Calendar cal = Calendar.getInstance();
-	//		String monthName= new SimpleDateFormat("MMM").format(cal.getTime());
-	//		File zipRepository=new File(EAUtil.CRMI_ZIP_FILE_REPOSITORY+monthName+"/");
-	//		
-	//		if (!zipRepository.exists()) {
-	//			zipRepository.mkdirs();
-	//		}
-	//
-	//		try {
-	//			zipUploaded = new File(zipRepository, fileModel.getFile().getOriginalFilename().replace(' ' , '_'));
-	//			FileCopyUtils.copy(fileModel.getFile().getBytes(), zipUploaded);
-	//		
-	//		} catch (IOException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}
-	//		FileMaster fileDetails = extractDecodeZip(zipUploaded);
-	//		getFileMetaData(fileDetails);
-	//		if (null != fileDetails.getMeterMaster()) {
-	//			saveFileDetails(fileDetails);
-	//		}
-	//		fileModel.getFilesUploadedDetail().add(fileDetails);
-	//		return fileModel;
-	//	}
 
 
 	@Autowired
 	private ApplicationContext context;
+	@Autowired
+	@org.springframework.beans.factory.annotation.Qualifier(value = "eaThreadPoolTaskExecutor")
+	private ThreadPoolTaskExecutor taskExecutor; 
+
 
 	@Autowired
-	private TaskExecutor taskExecutor; 
+	private SimpMessagingTemplate template;
 
 
 	public FileModel processMultiZipUploadedFile(FileModel fileModel) {
@@ -107,7 +65,7 @@ public class UploadingService extends FileServiceUtil {
 
 		Calendar cal = Calendar.getInstance();
 		String uploadDate= new SimpleDateFormat("MMM_yyyy_dd").format(cal.getTime());
-		
+
 		File zipRepository=new File(EAUtil.CRMI_ZIP_FILE_REPOSITORY+uploadDate+"/");
 
 		if (!zipRepository.exists()) {
@@ -116,6 +74,10 @@ public class UploadingService extends FileServiceUtil {
 
 		List<File> uploadedZipFilesList=new ArrayList<File>();
 
+		if(null!=multipartFiles)
+		{
+			this.template.convertAndSend("/topic/fileUploadingStatus",new OutputMessage(HtmlUtils.htmlEscape(multipartFiles.length+" Files uploading started")) );
+		}
 		for (MultipartFile multipartFile : multipartFiles) {
 			if(multipartFile.getSize()>0)
 			{
@@ -129,6 +91,7 @@ public class UploadingService extends FileServiceUtil {
 
 					}
 					FileCopyUtils.copy(multipartFile.getBytes(), zipUploaded);
+					this.template.convertAndSend("/topic/fileUploadingStatus",new OutputMessage(HtmlUtils.htmlEscape(zipUploaded.getName()+" File copied")) );
 
 					uploadedZipFilesList.add(zipUploaded);
 				} catch (IOException e) {
@@ -138,12 +101,12 @@ public class UploadingService extends FileServiceUtil {
 
 			}
 		}
-		
-		
+
+
 		//Files have been uploaded status update via socket
-		
-		
-		
+
+
+
 		DataReaderThread dataReaderThread= context.getBean(DataReaderThread.class);
 
 		for (File file : uploadedZipFilesList) {
@@ -155,6 +118,8 @@ public class UploadingService extends FileServiceUtil {
 				if(fileDetails.getTxtfileName()!=null && !fileDetails.getTxtfileName().isEmpty())
 				{
 
+					this.template.convertAndSend("/topic/fileUploadingStatus",new OutputMessage(HtmlUtils.htmlEscape(fileDetails.getUserfileName()+" Verifying file data!")) );
+
 					dataReaderThread.getFileMetaData(fileDetails);
 					if(null==fileDetails.getTransactionDate())
 					{
@@ -163,6 +128,8 @@ public class UploadingService extends FileServiceUtil {
 				}
 				setFileActionStatus(fileDetails);
 				saveFileDetails(fileDetails);
+				this.template.convertAndSend("/topic/fileUploadingStatus",new OutputMessage(HtmlUtils.htmlEscape(fileDetails.getUserfileName()+" saving file to database!")) );
+
 				fileModel.getFilesUploadedDetail().add(fileDetails);
 			}
 		}

@@ -5,9 +5,8 @@ import java.util.List;
 
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.MeterMaster;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
-import org.pstcl.ea.entity.meterTxnEntity.DailyTransactionForRemovedMeters;
 import org.pstcl.ea.entity.meterTxnEntity.DailyTransactionMappedSuper;
 import org.pstcl.ea.entity.meterTxnEntity.TamperLogTransaction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,10 +14,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class LocationMeterMappingModel {
 
-	private MeterLocationMap oldMeterLocationMap ;
+	private MapMeterLocation oldMeterLocationMap ;
 
 
 	private MeterMaster meterMaster;
+	
+	private LocationMaster locationMaster;
 
 	private LocationMaster location;
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -28,7 +29,7 @@ public class LocationMeterMappingModel {
 	private String error;
 
 	private Boolean mappingSuccesful;
-	private List<DailyTransactionMappedSuper> dailyTransactions;
+	private List<DailyTransaction> dailyTransactions;
 	private List<TamperLogTransaction> tamperLogTransactions;
 
 
@@ -102,9 +103,6 @@ public class LocationMeterMappingModel {
 
 
 
-	public List<DailyTransactionMappedSuper> getDailyTransactions() {
-		return dailyTransactions;
-	}
 
 
 
@@ -121,13 +119,6 @@ public class LocationMeterMappingModel {
 
 
 
-
-
-
-
-	public void setDailyTransactions(List<DailyTransactionMappedSuper> dailyTransactions) {
-		this.dailyTransactions = dailyTransactions;
-	}
 
 
 
@@ -212,14 +203,14 @@ public class LocationMeterMappingModel {
 	public void setMeterMaster(MeterMaster meterMaster) {
 		this.meterMaster = meterMaster;
 	}
-	public MeterLocationMap getOldMeterLocationMap() {
+	public MapMeterLocation getOldMeterLocationMap() {
 		return oldMeterLocationMap;
 	}
 
-	public void setOldMeterLocationMap(MeterLocationMap oldMeterLocationMapId) {
+	public void setOldMeterLocationMap(MapMeterLocation oldMeterLocationMapId) {
 		this.oldMeterLocationMap = oldMeterLocationMapId;
 	}
-	public void setOldValues(MeterLocationMap meterDetails) {
+	public void setOldValues(MapMeterLocation meterDetails) {
 		// TODO Auto-generated method stub
 		this.oldMeterLocationMap=meterDetails;
 		this.meterMaster=meterDetails.getMeterMaster();
@@ -250,6 +241,98 @@ public class LocationMeterMappingModel {
 
 	public void setError(String error) {
 		this.error = error;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public List<DailyTransaction> getDailyTransactions() {
+		return dailyTransactions;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setDailyTransactions(List<DailyTransaction> dailyTransactions) {
+		this.dailyTransactions = dailyTransactions;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public LocationMaster getLocationMaster() {
+		return locationMaster;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setLocationMaster(LocationMaster locationMaster) {
+		this.locationMaster = locationMaster;
 	}
 
 

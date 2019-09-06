@@ -56,7 +56,7 @@ colgroup .exportData {
 <title>Energy Meters</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -189,7 +189,7 @@ colgroup .exportData {
 											alt="Equipment" /> Details..
 										</a>
 										<div class="sub-title">Bay
-											:${monthlyTransactionForMeter.location.feederMaster.feederName}&nbsp;&nbsp;(${monthlyTransactionForMeter.location.boundaryTypeMaster.boundaryType})
+											:${monthlyTransactionForMeter.location.feederName}&nbsp;&nbsp;(${monthlyTransactionForMeter.location.boundaryTypeMaster.boundaryType})
 										</div>
 										<div class="sub-title">
 											Make:${monthlyTransactionForMeter.location.meterMaster.meterType}
@@ -243,7 +243,7 @@ colgroup .exportData {
 															<tr>
 																<th>Feeder Name</th>
 
-																<td>${monthlyTransactionForMeter.location.feederMaster.feederName}</td>
+																<td>${monthlyTransactionForMeter.location.feederName}</td>
 															</tr>
 
 															<tr>

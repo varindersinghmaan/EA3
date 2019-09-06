@@ -72,7 +72,7 @@
 <title>Sub Station Master</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="../authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -151,7 +151,7 @@
 
 									<tr>
 										<td>${location.locationId}</td>
-										<td>${location.feederMaster.feederName}</td>
+										<td>${location.feederName}</td>
 										<td>${location.boundaryTypeMaster.boundaryType}</td>
 
 										<td><button data-toggle="collapse"

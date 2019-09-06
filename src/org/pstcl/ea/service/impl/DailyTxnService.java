@@ -8,11 +8,11 @@ import java.util.List;
 import org.pstcl.ea.dao.ILocationEMFDao;
 import org.pstcl.ea.dao.ILocationMasterDao;
 import org.pstcl.ea.dao.IMeterMasterDao;
-import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.dao.MapMeterLocationDao;
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.MeterMaster;
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
 import org.pstcl.ea.model.LocationSurveyDataModel;
 import org.pstcl.ea.service.impl.parallel.CalculationMappingUtil;
@@ -33,7 +33,7 @@ public class DailyTxnService extends EnergyAccountsService{
 
 
 	@Autowired
-	protected MeterLocationMapDao mtrLocMappingDao;
+	protected MapMeterLocationDao mtrLocMappingDao;
 
 	@Autowired
 	protected ILocationEMFDao locEmfDao;
@@ -61,7 +61,7 @@ public class DailyTxnService extends EnergyAccountsService{
 			DailyTransaction dailyTransactionFromLoadSurvey=null;
 			if(null==dailyTransaction)
 			{	
-				MeterLocationMap  meterLocationMap=mtrLocMappingDao.findMeterLocationMapByDate(locationId, current);
+				MapMeterLocation  meterLocationMap=mtrLocMappingDao.findMeterLocationMapByDate(locationId, current);
 				if(meterLocationMap!=null)
 				{
 					meterMaster=meterLocationMap.getMeterMaster();
@@ -118,7 +118,7 @@ public class DailyTxnService extends EnergyAccountsService{
 		for(Date current = startDate;!current.after(endDate);current =DateUtil.nextDay(current))
 		{
 			DailyTransaction dailyTransaction=dailyTransactionDao.findByLocationDateCombo(locationMaster, current);
-			MeterLocationMap  meterLocationMap=mtrLocMappingDao.findMeterLocationMapByDate(locationId, current);
+			MapMeterLocation  meterLocationMap=mtrLocMappingDao.findMeterLocationMapByDate(locationId, current);
 			if(meterLocationMap!=null)
 			{
 				meterMaster=meterLocationMap.getMeterMaster();
@@ -149,7 +149,7 @@ public class DailyTxnService extends EnergyAccountsService{
 
 
 		Date startDateOfMonth=		dailyTransactionModel.getStartDate();
-		List<MeterLocationMap> mtrLocMapList =  mtrLocMappingDao.getMapByLocationAndDate(dailyTransactionModel.getLocationMaster(), startDateOfMonth);
+		List<MapMeterLocation> mtrLocMapList =  mtrLocMappingDao.getMapByLocationAndDate(dailyTransactionModel.getLocationMaster(), startDateOfMonth);
 
 		List<LocationMFMap> locationEMFList=locEmfDao.findLocationEmfByLocAndDate(mtrLocMapList, startDateOfMonth); 
 

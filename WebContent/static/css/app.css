@@ -3,7 +3,7 @@ body {
 	font-size: 14px;
 	font-weight: normal;
 	display: block;
-	padding-top: 82px;
+	padding-top: 100px;
 }
 
 .table-responsive {
@@ -214,12 +214,29 @@ div .card {
 
 header {
 	background: white;
-	.
 	fixed-top;
 }
 
-nav { .fixed-top;
-	background: #e9ecef;
+nav { 
+	.fixed-top;
+	.sticky-top;
+	
+}
+.top-navbar{
+	height: 100px;
+}
+.navbar-brand
+{
+	width:100px;
+	height: 100px;
+	margin: 100px 100px 100px 100px;
+	padding: 100px 100px 1000px 100px;
+}
+.navbar-brand>img
+{
+	width:60px;
+	height: 50px;
+	
 }
 
 #searchBar {
@@ -344,4 +361,14 @@ td {
     padding-left: 10px; 
     margin-right: 8px;
     margin-left: 8px;;
+}
+#main-content {
+    max-width: 940px;
+    padding: 2em 3em;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }

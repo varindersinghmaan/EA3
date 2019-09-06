@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 
 public class LossReportEntity implements Comparable<LossReportEntity> {
 
-	private List<MeterLocationMap> meterLocationMapList;
+	private List<MapMeterLocation> meterLocationMapList;
 	private List<LocationMFMap> locationMFMapList;
 
 	private String meterSrNo;
@@ -133,7 +133,7 @@ public class LossReportEntity implements Comparable<LossReportEntity> {
 		return meterCategory;
 	}
 
-	public List<MeterLocationMap> getMeterLocationMapList() {
+	public List<MapMeterLocation> getMeterLocationMapList() {
 		return meterLocationMapList;
 	}
 
@@ -226,9 +226,9 @@ public class LossReportEntity implements Comparable<LossReportEntity> {
 		this.lossReportOrder = lossReportOrder;
 	}
 
-	public void setMeterLocationMapList(List<MeterLocationMap> meterLocationMapList) {
+	public void setMeterLocationMapList(List<MapMeterLocation> meterLocationMapList) {
 		this.meterLocationMapList = meterLocationMapList;
-		for (MeterLocationMap meterLocationMap : meterLocationMapList) {
+		for (MapMeterLocation meterLocationMap : meterLocationMapList) {
 
 			if(null==meterSrNo)
 			{

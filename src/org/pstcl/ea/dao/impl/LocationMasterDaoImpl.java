@@ -8,7 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.pstcl.ea.dao.ILocationMasterDao;
 import org.pstcl.ea.entity.EAUser;
 import org.pstcl.ea.entity.LocationMaster;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.model.EAFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +112,7 @@ public List<String> findDistinctVoltageLevel(){
 
 @Override
 public List<LocationMaster> findLocationsWithNoMapping(){
-	Criteria critLocationList = getSession().createCriteria(MeterLocationMap.class);
+	Criteria critLocationList = getSession().createCriteria(MapMeterLocation.class);
 	critLocationList.add(Restrictions.isNull("endDate"));
 	critLocationList.setProjection(Projections.projectionList().add(Projections.distinct(Projections.property("locationMaster.locationId"))) );
     List <String> mappedLocations = critLocationList.list();

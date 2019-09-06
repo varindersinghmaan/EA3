@@ -12,23 +12,26 @@ import org.pstcl.ea.dao.IInstantRegistersDao;
 import org.pstcl.ea.dao.ILocationEMFDao;
 import org.pstcl.ea.dao.ILossReportDao;
 import org.pstcl.ea.dao.ITamperLogDao;
-import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.dao.MapMeterLocationDao;
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.LossReportEntity;
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.entity.meterTxnEntity.InstantRegisters;
 import org.pstcl.ea.model.reporting.ConsolidatedLossReportModel;
 import org.pstcl.ea.model.reporting.LossReportModel;
 import org.pstcl.ea.model.reporting.ReportParametersModel;
 import org.pstcl.ea.model.reporting.TamperDetailsProjectionEntity;
+import org.pstcl.ea.service.impl.DateServiceUtil;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ibm.icu.util.Calendar;
+
 @Service("lossReportService")
-public class LossReportService implements IlossReportService {
+public class LossReportService extends DateServiceUtil implements IlossReportService  {
 
 	@Autowired
 	ILossReportDao lossReportDao;
@@ -238,7 +241,7 @@ public class LossReportService implements IlossReportService {
 
 	}
 	@Autowired
-	protected MeterLocationMapDao mtrLocMappingDao;
+	protected MapMeterLocationDao mtrLocMappingDao;
 
 	@Autowired
 	protected ILocationEMFDao locEmfDao;
@@ -266,14 +269,14 @@ public class LossReportService implements IlossReportService {
 					List<LocationMFMap> locationMFMapList=locEmfDao.findLocationEmfByDate(locationMaster.getLocationId(),startDate);
 					reportEntity.setLocationMFMapList(locationMFMapList);
 
-					List<MeterLocationMap> meterLocationMapList=mtrLocMappingDao.getMapByLocationAndDate(locationMaster, startDate);
+					List<MapMeterLocation> meterLocationMapList=mtrLocMappingDao.getMapByLocationAndDate(locationMaster, startDate);
 					reportEntity.setMeterLocationMapList(meterLocationMapList);
 				}
 				catch(Exception e)
 				{
 					e.printStackTrace();
 				}			
-				
+
 			}
 		}
 	}
@@ -312,7 +315,7 @@ public class LossReportService implements IlossReportService {
 
 
 		List<LossReportEntity> lossReportEntities = lossReportDao.getDailyTransactionsProjection(criteria, startDate, endDate);
-		
+
 		if(initialiseLazy)
 		{
 			initialiseReportLocationMeterDetails(startDate,lossReportEntities);
@@ -330,6 +333,8 @@ public class LossReportService implements IlossReportService {
 
 		return dailyProjectionModel;
 	}
+
+	
 
 	//	private LossReportEntity getSumEntity(List<LossReportEntity> lossReportEntities)
 	//	{

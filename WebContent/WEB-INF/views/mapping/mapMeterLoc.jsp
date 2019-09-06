@@ -10,7 +10,7 @@
 
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="../authheader.jsp"%>
 	<div class="sticky-top">
 		<nav aria-label="breadcrumb" class="sticky-top">
@@ -136,7 +136,7 @@
 
 									<td>${meterLocationMapping.meterMaster.meterSrNo}</td>
 									<td>${meterLocationMapping.meterMaster.meterType}</td>
-									<td>${meterLocationMapping.locationMaster.feederMaster.feederName}</td>
+									<td>${meterLocationMapping.locationMaster.feederName}</td>
 									<td>${meterLocationMapping.locationMaster.boundaryTypeMaster.boundaryType}</td>
 									<td><fmt:formatDate value="${location.startDate}"
 											pattern="yyyy-MM-dd HH:mm:ss" /></td>

@@ -9,8 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -92,11 +91,11 @@ public class Transaction {
 		this.location = location;
 	}
 
-	public MeterLocationMap getMeterLocationMap() {
+	public MapMeterLocation getMeterLocationMap() {
 		return meterLocationMap;
 	}
 
-	public void setMeterLocationMap(MeterLocationMap meterLocationMap) {
+	public void setMeterLocationMap(MapMeterLocation meterLocationMap) {
 		this.meterLocationMap = meterLocationMap;
 	}
 
@@ -113,7 +112,7 @@ public class Transaction {
 	@JsonIgnore
 	@ManyToOne (fetch=FetchType.LAZY)
 	@JoinColumn(name = "METER_LOC_MAP_ID")
-	protected MeterLocationMap meterLocationMap;
+	protected MapMeterLocation meterLocationMap;
 
 
 

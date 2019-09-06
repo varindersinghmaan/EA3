@@ -16,9 +16,13 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.pstcl.ea.entity.FileMaster;
+import org.pstcl.ea.messaging.OutputMessage;
 import org.pstcl.ea.service.impl.parallel.TimeoutProcessKiller;
 import org.pstcl.ea.util.EAUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.util.HtmlUtils;
 
 public abstract class FileServiceUtil extends EnergyAccountsService {
 
@@ -27,6 +31,8 @@ public abstract class FileServiceUtil extends EnergyAccountsService {
 	}
 
 
+	@Autowired
+    private SimpMessagingTemplate template;
 
 
 	public FileMaster extractDecodeZip(File zipUploaded) {
@@ -66,6 +72,8 @@ public abstract class FileServiceUtil extends EnergyAccountsService {
 			fileDetails.setZipfileName(zipUploaded.getAbsolutePath());
 			fileDetails.setUserfileName(zipUploaded.getName());
 			fileDetails.setProcessingStatus(EAUtil.FILE_ZIP_EXTRACTED);
+			
+				
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -205,12 +213,15 @@ public abstract class FileServiceUtil extends EnergyAccountsService {
 		try {
 			FileCopyUtils.copy(tempTextFile, txtfile);
 			fileDetails.setTxtfileName(txtfile.getAbsolutePath());
-
+			 this.template.convertAndSend("/topic/fileUploadingStatus",new OutputMessage(HtmlUtils.htmlEscape(zipUploaded.getName()+" File extracted successfully")) );
+				
 			fileDetails.setProcessingStatus(EAUtil.FILE_ZIP_EXTRACTED);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 this.template.convertAndSend("/topic/fileUploadingStatus",new OutputMessage(HtmlUtils.htmlEscape(zipUploaded.getName()+" File extraction failed")) );
+				
+			 e.printStackTrace();
+			
 		}
 
 		try {

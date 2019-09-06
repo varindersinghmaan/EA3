@@ -3,6 +3,7 @@ package org.pstcl.ea.model.reporting;
 public class ReportParametersModel {
 	private String locationId;
 	private String reportType;
+	private Integer reportCategory;
 	private Integer reportMonth;
 	private Integer reportYear;
 	public String getReportType() {
@@ -28,6 +29,12 @@ public class ReportParametersModel {
 	}
 	public void setLocationId(String locationId) {
 		this.locationId = locationId;
+	}
+	public Integer getReportCategory() {
+		return reportCategory;
+	}
+	public void setReportCategory(Integer reportCategory) {
+		this.reportCategory = reportCategory;
 	}
 	
 

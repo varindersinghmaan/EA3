@@ -9,10 +9,12 @@ import org.pstcl.ea.dao.IInstantRegistersDao;
 import org.pstcl.ea.dao.ILocationMasterDao;
 import org.pstcl.ea.dao.ILossReportDao;
 import org.pstcl.ea.dao.ITamperLogDao;
-import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.dao.MapMeterLocationDao;
+import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.entity.LocationMaster;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.entity.meterTxnEntity.InstantRegisters;
+import org.pstcl.ea.model.EAFilter;
 import org.pstcl.ea.model.FileFilter;
 import org.pstcl.ea.model.LocationFileModel;
 import org.pstcl.ea.model.LocationSurveyDataModel;
@@ -41,7 +43,7 @@ public class ReportService {
 
 
 	@Autowired
-	MeterLocationMapDao mtrLocMapDao;
+	MapMeterLocationDao mtrLocMapDao;
 
 	public LocationSurveyDataModel getReportTransactions(String locationId, int month, int year) {
 
@@ -60,33 +62,9 @@ public class ReportService {
 	}
 
 
-	public List<LocationFileModel> getPendingLossReportLocation(Integer month, Integer year) {
-
-		List<LocationFileModel> list =new ArrayList<LocationFileModel>();
-		Date startDate=DateUtil.startDateTimeForDailySurveyRecs(month, year);
-		Date endDate=DateUtil.endDateTimeForDailySurveyRecs(month, year);
-		//locationMasterDao.findPendingLossReportLocations1(startDate,endDate);
-		//List <LocationMaster> locations =lossReportDao.getIncompleteDailyEntryLocations(null,startDate,endDate);
-
-		List <LocationMaster> locations =lossReportDao.findPendingLossReportLocations(startDate,endDate);
-		FileFilter filter=new FileFilter();
-		filter.setTransactionDateFrom(DateUtil.startDateTimeForDailySurveyRecs(month+1, year));
-		filter.setTransactionDateTo(DateUtil.endDateTimeForDailySurveyRecs(month+1, year));
-
-		for (LocationMaster locationMaster : locations) {
-			LocationFileModel locationFileModel=new LocationFileModel();
-			locationFileModel.setLocationMaster(locationMaster);
-			filter.setLocation(locationMaster);
-			filter.setFileActionStatus(EAUtil.FILE_ACTION__APPROVED_AE);
-			List<MeterLocationMap> meterLocationMappingList = mtrLocMapDao.findMeterLocationMapByLoc(locationMaster.getLocationId());
-			locationFileModel.setMeterLocationMaps(meterLocationMappingList);
-			//List<FileMaster> fileMasters=fileMasterDao.filterFiles(filter);
-			//locationFileModel.setFileMasters(fileMasters);
-			list.add(locationFileModel);
-		}
-
-		return list;
-	}
+	
+	
+	
 
 
 }

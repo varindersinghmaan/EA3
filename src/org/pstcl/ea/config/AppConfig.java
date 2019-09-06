@@ -7,14 +7,13 @@ import java.util.concurrent.TimeUnit;
 import org.pstcl.ea.birt.spring.BirtViewReport;
 import org.pstcl.ea.birt.spring.core.BirtEngineFactory;
 import org.pstcl.ea.birt.spring.core.BirtView;
-import org.pstcl.ea.converters.MapReportLocationsConverter;
 import org.pstcl.ea.converters.BoundaryTypeConverter;
 import org.pstcl.ea.converters.CircleConverter;
 import org.pstcl.ea.converters.DeviceTypeConverter;
 import org.pstcl.ea.converters.DivisionConverter;
-import org.pstcl.ea.converters.FeederMasterConverter;
 import org.pstcl.ea.converters.LocationConverter;
 import org.pstcl.ea.converters.LocationEmfConverter;
+import org.pstcl.ea.converters.MapReportLocationsConverter;
 import org.pstcl.ea.converters.MeterConverter;
 import org.pstcl.ea.converters.MeterLocationConverter;
 import org.pstcl.ea.converters.SubstationConverter;
@@ -37,9 +36,7 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.XmlViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
 @EnableWebMvc
@@ -61,8 +58,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Autowired
     LocationEmfConverter locationEmfConverter;
 
-    @Autowired
-    FeederMasterConverter feederMasterConverter;
     
     @Autowired
     BoundaryTypeConverter boundaryTypeConverter;
@@ -83,8 +78,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-		registry.addResourceHandler(new String[]{"/static/**"}).addResourceLocations(new String[]{"/static/"})
-		.setCacheControl(CacheControl.maxAge(31536000L, TimeUnit.SECONDS));
+		registry.addResourceHandler(new String[]{"/static/**"}).addResourceLocations(new String[]{"/static/","/static/js/"})
+		.setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS));
 	}
 
 	public void addFormatters(final FormatterRegistry registry) {
@@ -96,7 +91,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		registry.addConverter(meterConverter);
 		registry.addConverter(locationEmfConverter);
 		registry.addConverter(boundaryTypeConverter);
-		registry.addConverter(feederMasterConverter);
+
 		registry.addConverter(deviceTypeConverter);
 		registry.addConverter(addReportLocationsConverter);
 	}

@@ -5,8 +5,7 @@
 		showProgressBar();
 
 		$('#lossReportDiv').css('display', 'none');
-		$('#loader').css('display', 'block');
-
+	
 		if ($("#reportDate").val() == "") {
 			var newdate = new Date();
 			newdate.setDate(new Date().getDate() - 15); // minus the date
@@ -41,7 +40,7 @@
 		var reportParamsModel = applyFilters();
 		
 	$.ajax({
-			url : "lossReportDyn",
+			url : "lossReportDashBoard",
 			type : "POST",
 			data : JSON.stringify(reportParamsModel),
 			contentType : 'application/json',
@@ -50,9 +49,7 @@
 				initDataTables();
 				$('#lossReportDiv').css('display', 'block');
 				hideProgressBar();
-				
-				$('#loader').css('display', 'none');
-
+			
 			},
 			error : function(data, status, er) {
 				alert("OBJECT Error" + data + er);

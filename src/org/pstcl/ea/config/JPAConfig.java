@@ -50,7 +50,7 @@ public class JPAConfig {
 		= new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
 		em.setPackagesToScan(new String[] { "org.pstcl" });
-		System.out.println("jh");
+		//System.out.println("jh");
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
 		em.setJpaProperties(additionalProperties());

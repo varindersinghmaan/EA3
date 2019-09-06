@@ -1,9 +1,10 @@
 package org.pstcl.ea.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.dao.MapMeterLocationDao;
 import org.pstcl.ea.entity.CircleMaster;
 import org.pstcl.ea.entity.DivisionMaster;
 import org.pstcl.ea.entity.EAUser;
@@ -11,12 +12,13 @@ import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.MeterMaster;
 import org.pstcl.ea.entity.SubstationMaster;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.model.EAFilter;
 import org.pstcl.ea.model.EAModel;
 import org.pstcl.ea.model.FileFilter;
 import org.pstcl.ea.model.FileModel;
 import org.pstcl.ea.model.LocationFileModel;
+import org.pstcl.ea.model.reporting.ReportParametersModel;
 import org.pstcl.ea.security.UserRole;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
@@ -29,7 +31,7 @@ public class SubstationDataServiceImpl extends EnergyAccountsService{
 	
 
 	@Autowired
-	MeterLocationMapDao mtrLocMapDao;
+	MapMeterLocationDao mtrLocMapDao;
 
 	public SubstationMaster findSubstationById(int ssCode) {
 		return substationUtilityDao.findSubstationByID(ssCode);
@@ -191,37 +193,41 @@ public class SubstationDataServiceImpl extends EnergyAccountsService{
 		return list;
 	}
 
-
-	public List<LocationFileModel> getPendingLocations(EAFilter eafilter,Integer month, Integer year) {
+	public List<LocationFileModel> getPendingPMLocations(EAFilter eafilter,Integer month, Integer year) {
 
 		eafilter=(EAFilter)setUserLocation(eafilter);
-
-
-
 		List<LocationFileModel> list =new ArrayList<LocationFileModel>();
 		List <LocationMaster> locations =lossReportDao.findPendingLocations(eafilter,month,year);
+		getMetersForLocations(list, locations);
+		return list;
+	}
 
+	public List<LocationFileModel> getPendingLossReportLocation(ReportParametersModel parametersModel) {
 
-		FileFilter filter=new FileFilter();
-		filter.setTransactionDateFrom(DateUtil.startDateTimeForDailySurveyRecs(month+1, year));
-		filter.setTransactionDateTo(DateUtil.endDateTimeForDailySurveyRecs(month+1, year));
-
-		for (LocationMaster locationMaster : locations) {
-			LocationFileModel locationFileModel=new LocationFileModel();
-			locationFileModel.setLocationMaster(locationMaster);
-			filter.setLocation(locationMaster);
-			filter.setFileActionStatus(EAUtil.FILE_ACTION__APPROVED_AE);
-
-			List<MeterLocationMap> meterLocationMappingList = mtrLocMapDao.findMeterLocationMapByLoc(locationMaster.getLocationId());
-			locationFileModel.setMeterLocationMaps(meterLocationMappingList);
-			List<FileMaster> fileMasters=fileMasterDao.filterFiles(filter);
-			locationFileModel.setFileMasters(fileMasters);
-			list.add(locationFileModel);
-		}
+		List<LocationFileModel> list =new ArrayList<LocationFileModel>();
+		Date startDate=DateUtil.startDateTimeForDailySurveyRecs(parametersModel.getReportMonth(), parametersModel.getReportYear());
+		Date endDate=DateUtil.endDateTimeForDailySurveyRecs(parametersModel.getReportMonth(), parametersModel.getReportYear());
+		List <LocationMaster> locations =lossReportDao.findPendingLossReportLocations(startDate,endDate);
+		getMetersForLocations(list, locations);
 
 		return list;
 	}
 
+	private void getMetersForLocations(List<LocationFileModel> list, List<LocationMaster> locations) {
+		for (LocationMaster locationMaster : locations) {
+			LocationFileModel locationFileModel=new LocationFileModel();
+			locationFileModel.setLocationMaster(locationMaster);
+			List<MapMeterLocation> meterLocationMappingList = mtrLocMapDao.findMeterLocationMapByLoc(locationMaster.getLocationId());
+			locationFileModel.setMeterLocationMaps(meterLocationMappingList);
+			list.add(locationFileModel);
+		}
+	}
+
+	public FileModel getFileInRepo(ReportParametersModel reportParametersModel) {
+		return getFileInRepo(reportParametersModel.getReportMonth(), reportParametersModel.getReportYear());
+	}
+
+	
 
 
 }

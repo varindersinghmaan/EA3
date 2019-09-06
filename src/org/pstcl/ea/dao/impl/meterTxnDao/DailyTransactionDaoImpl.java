@@ -45,18 +45,19 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 		return sessionFactory.getCurrentSession();
 	}
 
-	static final Logger logger = LoggerFactory.getLogger(DailyTransactionDaoImpl.class);
+	static final Logger logger = LoggerFactory.getLogger("DailyTransactionFileLogger");
+
 
 	@Override
 	public DailyTransaction findById(int id) {
 		DailyTransaction txn = getSession().get(DailyTransaction.class,id);
+
 		return txn;
 	}
 
 
 
 	@Transactional(value="sldcTxnManager")
-
 	protected Criteria createEntityCriteria(){
 		return getSession().createCriteria(DailyTransaction.class);
 	}
@@ -72,16 +73,7 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 		getSession().delete(txn);
 	}
 
-	@Override
-	public void save(DailyTransaction txn,EAUser user) {
 
-		Session session=sessionFactory.openSession();
-		Transaction transaction=session.beginTransaction();
-
-		session.persist(txn);
-		transaction.commit();
-		session.close();
-	}
 
 	@Override
 	public void update(DailyTransaction txn,EAUser user) {
@@ -93,37 +85,6 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 		session.close();
 	}
 
-	//	private List <String> getLocationMeters(FilterModel entity)
-	//
-	//	{
-	//		Criteria critLocationList = getSession().createCriteria(LocationMaster.class);
-	//
-	//		if(null!=entity)
-	//		{
-	//			if(null!=entity.getSubstation())
-	//			{
-	//				critLocationList.add(Restrictions.eq("substationMaster.ssCode", entity.getSubstation().getSsCode()));
-	//			}
-	//		}
-	//		critLocationList.setProjection(Projections.property("meterSrNo"));
-	//		return critLocationList.list();
-	//	}
-
-
-
-
-
-	//	@Override
-	//	public DailyTransaction findByMeter(MeterMaster meter, Date txnDate) {
-	//
-	//
-	//		Criteria crit = createEntityCriteria();
-	//		crit.add(Restrictions.eq("meterMaster.meterSrNo", meter.getMeterSrNo()));
-	//
-	//		crit.add(Restrictions.eq("transactionDate",txnDate));
-	//
-	//		return (DailyTransaction) crit.uniqueResult();
-	//	}
 
 
 
@@ -159,7 +120,51 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 
 
 	@Override
+	public void updateAll(List<DailyTransaction> dailyTransactions, EAUser loggedInUser) {
+
+		Session session=sessionFactory.openSession();
+		Transaction transaction=session.beginTransaction();
+		for (DailyTransaction dailyTransaction : dailyTransactions) {
+			try
+			{
+				if (null != dailyTransaction) {
+					session.saveOrUpdate(dailyTransaction);
+				}
+
+			}
+			catch(ConstraintViolationException dupExp)
+			{
+				logger.error(dupExp.getMessage());
+				logger.error(dailyTransaction.toString());
+				transaction.rollback();
+				session.close();
+				System.out.println("Came Back from Exception");
+
+			}
+			catch (Exception e) {
+				logger.error(e.getMessage());
+				logger.error(dailyTransaction.toString());
+				transaction.rollback();
+				session.close();
+
+			}
+		}
+		try
+		{
+			transaction.commit();
+			session.close();
+		}
+		catch(Exception e)
+		{
+			logger.error(e.getMessage());
+		}
+	}
+
+
+
+	@Override
 	public void save(List<DailyTransaction> dailyTransactions, EAUser loggedInUser) {
+
 		Session session=sessionFactory.openSession();
 		Transaction transaction=session.beginTransaction();
 		for (DailyTransaction dailyTransaction : dailyTransactions) {
@@ -172,12 +177,17 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 			}
 			catch(ConstraintViolationException dupExp)
 			{
+				logger.error(dupExp.getMessage());
+				logger.error(dailyTransaction.toString());
 				transaction.rollback();
 				session.close();
 				saveOrUpdateInCaseDuplicateException(dailyTransactions, loggedInUser);
+				System.out.println("Came Back from Exception");
 				return;
 			}
 			catch (Exception e) {
+				logger.error(e.getMessage());
+				logger.error(dailyTransaction.toString());
 				transaction.rollback();
 				session.close();
 				saveOrUpdateInCaseDuplicateException(dailyTransactions, loggedInUser);
@@ -196,17 +206,42 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 			try
 			{
 				Criteria crit = session.createCriteria(DailyTransaction.class);
-				System.out.println(dailyTransaction);
-				if(null== dailyTransaction.getLocation())
+				if(dailyTransaction.getLocation()!=null)
 				{
-					System.out.println(dailyTransactions.indexOf(dailyTransaction)+": "+ dailyTransaction);
+					crit.add(Restrictions.eq("location.locationId", dailyTransaction.getLocation().getLocationId()));
+					crit.add(Restrictions.eq("transactionDate",dailyTransaction.getTransactionDate()));
 				}
-				crit.add(Restrictions.eq("location.locationId", dailyTransaction.getLocation().getLocationId()));
+				DailyTransaction entityByLocDate =(DailyTransaction) crit.uniqueResult();
+
+				//Called only in case of exception on duplicate entries for date,meterSrNo combo. Saves the records only if not found
+
+				crit = session.createCriteria(DailyTransaction.class);
+				crit.add(Restrictions.eq("meter.meterSrNo", dailyTransaction.getMeter().getMeterSrNo()));
+				crit.add(Restrictions.ne("location.locationId", dailyTransaction.getLocation().getLocationId()));
 				crit.add(Restrictions.eq("transactionDate",dailyTransaction.getTransactionDate()));
-				DailyTransaction entity =(DailyTransaction) crit.uniqueResult();
-				if (null != entity) {
-					entity.updateValues(dailyTransaction);
-					session.update(entity);
+				DailyTransaction entityByMeterDate =(DailyTransaction) crit.uniqueResult();
+
+
+				if(entityByLocDate==null&&entityByMeterDate!=null)
+				{
+					logger.error("SINGLE DUPLICATE OF"+dailyTransaction.toString());
+					logger.error("DUPLICATE ENTITY WITH METER and DATE"+entityByMeterDate.toString());
+
+					entityByLocDate=entityByMeterDate;
+				}
+				else if(entityByLocDate!=null&&entityByMeterDate!=null)
+				{
+					logger.error("TWO DUPLICATES OF"+dailyTransaction.toString());
+					logger.error("DUPLICATE ENTITY WITH METER and DATE"+entityByMeterDate.toString());
+					logger.error("DUPLICATE ENTITY WITH LOCATION and DATE"+entityByLocDate.toString());
+
+					session.delete(entityByMeterDate);
+				}
+
+
+				if (null != entityByLocDate) {
+					entityByLocDate.updateValues(dailyTransaction);
+					session.update(entityByLocDate);
 				}
 				else
 				{
@@ -219,10 +254,12 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 				System.out.println(dupExp.getClass());
 				transaction.rollback();
 				session.close();
+				System.out.println(dailyTransaction);
 				return;
 			}
 			catch (Exception e) {
 				e.printStackTrace();
+				System.out.println(dailyTransaction);
 			}
 
 		}
@@ -248,7 +285,7 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 		List<DailyTransaction> results=criteria.list();
 
 
-	
+
 		return results;
 	}
 
@@ -264,12 +301,9 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 		{
 			return null;
 		}
+
 		criteria.add(Restrictions.ge("transactionDate",startDate));
 		List<DailyTransaction> results=criteria.list();
-
-
-	
-
 		return results;
 	}
 
@@ -349,4 +383,19 @@ public class DailyTransactionDaoImpl  implements IDailyTransactionDao {
 	}
 
 
+
+	@Override
+	public List<DailyTransaction> findAllAnyLocation(LocationMaster locationMaster) {
+		Criteria criteria = createEntityCriteria();
+		if(null!=locationMaster)
+		{
+			criteria.add(Restrictions.eq("location.locationId", locationMaster.getLocationId()));
+		}
+		else
+		{
+			return null;
+		}
+		List<DailyTransaction> results=criteria.list();
+		return results;
+	}
 }

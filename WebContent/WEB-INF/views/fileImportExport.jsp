@@ -27,7 +27,7 @@
 <title>Daily Data for File-${ cmriModel.fileMaster.userfileName}</title>
 </head>
 
-<body onload="myFunction()" style="margin: 0;">
+<body    style="margin: 0;">
 	<%@include file="authheader.jsp"%>
 	<%@include file="dataTablesHeader.jsp"%>
 

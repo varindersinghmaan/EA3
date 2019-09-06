@@ -6,13 +6,14 @@ import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.MeterMaster;
 import org.pstcl.ea.model.MastersForLocationEntry;
 import org.pstcl.ea.service.impl.SubstationDataServiceImpl;
-import org.pstcl.ea.service.impl.masters.EMFMappingService;
+import org.pstcl.ea.service.impl.masters.MapMFService;
 import org.pstcl.ea.service.impl.masters.LocationMasterService;
-import org.pstcl.ea.service.impl.masters.LocationMeterMappingService;
+import org.pstcl.ea.service.impl.masters.MapMeterLocationService;
 import org.pstcl.ea.service.impl.masters.MeterMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -39,10 +40,10 @@ public class MeterController {
 	MeterMasterService meterMasterService;
 
 	@Autowired
-	LocationMeterMappingService locationMeterMappingService;
+	MapMeterLocationService locationMeterMappingService;
 
 	@Autowired
-	private EMFMappingService emfMappingService;
+	private MapMFService emfMappingService;
 
 	/**
 	 * To generate options like meter type,meter make and meter category in add meter form
@@ -75,6 +76,7 @@ public class MeterController {
 	 * @param model
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
 	@RequestMapping(value = "/addMeter", method = RequestMethod.POST)
 	public Object saveMeterMaster(MeterMaster meter, BindingResult bindingResult, ModelMap model) {
 
@@ -103,6 +105,7 @@ public class MeterController {
 	 * @param model
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
 	@RequestMapping(value = "/updateMeter", method = RequestMethod.POST)
 	public Object updateMeter(MeterMaster meter, BindingResult bindingResult, ModelMap model) {
 

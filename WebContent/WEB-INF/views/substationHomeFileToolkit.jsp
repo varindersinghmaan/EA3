@@ -74,7 +74,7 @@
 
 	</c:choose>
 
-	<td><%@include file="fileDetailsActionSnippet.jsp"%>
+	<td><%@include file="./fileDetails/fileDetailsActionSnippet.jsp"%>
 
 	</td>
 

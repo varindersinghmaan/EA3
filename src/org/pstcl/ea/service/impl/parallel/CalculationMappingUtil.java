@@ -1,22 +1,14 @@
 package org.pstcl.ea.service.impl.parallel;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.entity.Transaction;
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
-import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class CalculationMappingUtil {
 
@@ -24,24 +16,19 @@ public class CalculationMappingUtil {
 		super();
 	}
 
-	public void setDailyTxnLocationAndMF(List<MeterLocationMap> mtrLocMapList, List<LocationMFMap> locationEMFList,  DailyTransaction dailyTransaction) {
+	public void setDailyTxnLocationAndMF(List<MapMeterLocation> mtrLocMapList, List<LocationMFMap> locationEMFList,  DailyTransaction dailyTransaction) {
 		setDailyTxnLocation(mtrLocMapList, dailyTransaction);
-		setDailyTxnLocationMF( locationEMFList, dailyTransaction);
+		setDailyTxnMFSign( locationEMFList, dailyTransaction);
 	}
-	public void setDailyTxnLocation(List<MeterLocationMap> mtrLocMapList,   DailyTransaction dailyTransaction) {
+	public void setDailyTxnLocation(List<MapMeterLocation> mtrLocMapList,   DailyTransaction dailyTransaction) {
 		dailyTransaction.setLocation(null);
 		dailyTransaction.setMeterLocationMap(null);
 
 		if (null!= mtrLocMapList)
 		{
-			if( mtrLocMapList.size()==1)
+			if(mtrLocMapList.size()>=1)
 			{
-				dailyTransaction.setLocation(mtrLocMapList.get(0).getLocationMaster());
-				dailyTransaction.setMeterLocationMap(mtrLocMapList.get(0));
-			}
-			else if(mtrLocMapList.size()>1)
-			{
-				for (MeterLocationMap locationMap : mtrLocMapList) {
+				for (MapMeterLocation locationMap : mtrLocMapList) {
 					if(null!=locationMap.getEndDate()&&(locationMap.getEndDate().compareTo(dailyTransaction.getTransactionDate())>=0)&&(locationMap.getStartDate().compareTo(dailyTransaction.getTransactionDate())<=0))
 					{
 						dailyTransaction.setLocation(locationMap.getLocationMaster());
@@ -63,25 +50,18 @@ public class CalculationMappingUtil {
 	}
 
 
-	public void setDailyTxnLocationMF( List<LocationMFMap> locationEMFList,  DailyTransaction dailyTransaction) {
-	
+	public void setDailyTxnMFSign( List<LocationMFMap> locationEMFList,  DailyTransaction dailyTransaction) {
+
 		dailyTransaction.setExternalMFMap(null);
 		dailyTransaction.setExternalMF(null);
 		dailyTransaction.setNetWHSign(null);
-	
+
 		if(null!=dailyTransaction.getLocation())
 		{
 
 			if (null!= locationEMFList)
 			{
-				if( locationEMFList.size()==1)
-				{
-					LocationMFMap locationMap =locationEMFList.get(0);
-					dailyTransaction.setExternalMFMap(locationMap);
-					dailyTransaction.setExternalMF(locationMap.getExternalMF());
-					dailyTransaction.setNetWHSign(locationMap.getNetWHSign());
-				}
-				else if(locationEMFList.size()>=1)
+				if(locationEMFList.size()>=1)
 				{
 					for (LocationMFMap locationMap : locationEMFList) {
 						if (dailyTransaction.getLocation().getLocationId().equalsIgnoreCase(locationMap.getLocationMaster().getLocationId()))
@@ -109,18 +89,18 @@ public class CalculationMappingUtil {
 			}
 
 		}
-		
+
 
 
 	}
 
 	public DailyTransaction calculateImportExport(DailyTransaction dailyTransaction) {
-		
+
 		dailyTransaction.setExportBoundaryPtMWH(null);
 		dailyTransaction.setImportBoundaryPtMWH(null);
 		dailyTransaction.setBoundaryPtImportExportDifferenceMWH(null);
 		dailyTransaction.setNetMWH(null);
-		
+
 		BigDecimal emf=dailyTransaction.getExternalMF();
 
 		if (null != dailyTransaction.getExportWHF() && null != dailyTransaction.getImportWHF()
@@ -176,12 +156,12 @@ public class CalculationMappingUtil {
 
 
 
-	public void setTransactionLocationFromMeter(List<MeterLocationMap> mtrLocMapList,   Transaction eaTransaction) {
+	public void setTransactionLocationFromMeter(List<MapMeterLocation> mtrLocMapList,   Transaction eaTransaction) {
 
 		eaTransaction.setLocation(null);
 		eaTransaction.setMeterLocationMap(null);
 
-		
+
 		if (null!= mtrLocMapList)
 		{
 			if( mtrLocMapList.size()==1)
@@ -191,7 +171,7 @@ public class CalculationMappingUtil {
 			}
 			else if(mtrLocMapList.size()>1)
 			{
-				for (MeterLocationMap locationMap : mtrLocMapList) {
+				for (MapMeterLocation locationMap : mtrLocMapList) {
 					if(null!=locationMap.getEndDate()&&(locationMap.getEndDate().compareTo(eaTransaction.getTransactionDate())>=0)&&(locationMap.getStartDate().compareTo(eaTransaction.getTransactionDate())<=0))
 					{
 						eaTransaction.setLocation(locationMap.getLocationMaster());
@@ -211,10 +191,10 @@ public class CalculationMappingUtil {
 
 		}
 	}
-	public void setFileLocationFromMeter(List<MeterLocationMap> mtrLocMapList,   FileMaster fileMaster) {
+	public void setFileLocationFromMeter(List<MapMeterLocation> mtrLocMapList,   FileMaster fileMaster) {
 
 		fileMaster.setLocation(null);
-		
+
 		if (null!= mtrLocMapList)
 		{
 			if( mtrLocMapList.size()==1)
@@ -223,7 +203,7 @@ public class CalculationMappingUtil {
 			}
 			else if(mtrLocMapList.size()>1)
 			{
-				for (MeterLocationMap locationMap : mtrLocMapList) {
+				for (MapMeterLocation locationMap : mtrLocMapList) {
 					if(null!=locationMap.getEndDate()&&(locationMap.getEndDate().compareTo(fileMaster.getTransactionDate())>=0)&&(locationMap.getStartDate().compareTo(fileMaster.getTransactionDate())<=0))
 					{
 						fileMaster.setLocation(locationMap.getLocationMaster());
@@ -240,4 +220,5 @@ public class CalculationMappingUtil {
 		}
 	}
 
+	
 }

@@ -10,9 +10,9 @@ import org.pstcl.ea.model.MastersForLocationEntry;
 import org.pstcl.ea.model.reporting.ReportParametersModel;
 import org.pstcl.ea.service.impl.lossreport.IlossReportService;
 import org.pstcl.ea.service.impl.lossreport.ReportService;
-import org.pstcl.ea.service.impl.masters.EMFMappingService;
+import org.pstcl.ea.service.impl.masters.MapMFService;
 import org.pstcl.ea.service.impl.masters.LocationMasterService;
-import org.pstcl.ea.service.impl.masters.LocationMeterMappingService;
+import org.pstcl.ea.service.impl.masters.MapMeterLocationService;
 import org.pstcl.ea.service.impl.masters.LocationUtilService;
 import org.pstcl.ea.service.impl.parallel.DataService;
 import org.pstcl.ea.util.DateUtil;
@@ -40,26 +40,16 @@ public class LocationController {
 	LocationUtilService locationUtilService;
 
 	@Autowired
-	LocationMeterMappingService locationMeterMappingService;
+	MapMeterLocationService locationMeterMappingService;
 
 
-	@Autowired
-	private ReportService lossReportService;
 
 	@Autowired
-	private EMFMappingService emfMappingService;
+	private MapMFService emfMappingService;
 	
 	
-	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
-	@RequestMapping(value = "/getPendingLossReportLocation", method = RequestMethod.GET)
-	public String getPendingLossReportLocation(@RequestParam(value = "month") Integer month,
-			@RequestParam(value = "year") Integer year,ModelMap modelMap) {
-		modelMap.addAttribute("pendingLocList", lossReportService.getPendingLossReportLocation(month,year));
-		modelMap.addAttribute("monthOfReport",DateUtil.convertMonthYearToDate(month, year) );
-		modelMap.addAttribute("month",month);
-		modelMap.addAttribute("year",year);
-		return "pendingLossMetersDetail";
-	}
+
+	
 	/**
 	 * Generates options to select circle ,division,substation and location dynamically
 	 * @param circleCode
@@ -98,6 +88,7 @@ public class LocationController {
 	 * @param model
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
 	@RequestMapping(value = "/addLocation", method = RequestMethod.POST)
 	public Object saveLocationMaster(LocationMaster locationMaster, BindingResult bindingResult, ModelMap model) {
 
@@ -142,6 +133,7 @@ public class LocationController {
 	 * @param model
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_SLDC_USER') or hasRole('ROLE_SLDC_ADMIN')")
 	@RequestMapping(value = "/updateLocation", method = RequestMethod.POST)
 	public Object updateLocation(LocationMaster locationMaster, BindingResult bindingResult, ModelMap model) {
 

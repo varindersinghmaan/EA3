@@ -7,7 +7,7 @@ import org.pstcl.ea.model.EAFilter;
 import org.pstcl.ea.model.FileModel;
 import org.pstcl.ea.service.impl.SubstationDataServiceImpl;
 import org.pstcl.ea.service.impl.UploadingService;
-import org.pstcl.ea.service.impl.masters.LocationMeterMappingService;
+import org.pstcl.ea.service.impl.masters.MapMeterLocationService;
 import org.pstcl.ea.service.impl.parallel.DataService;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
@@ -45,14 +45,7 @@ public class SubstationDataController {
 
 
 
-	@PreAuthorize("hasRole('ROLE_SS_JE') or hasRole('ROLE_SS_AE') or hasRole('ROLE_SR_XEN') or hasRole('ROLE_SE')")
-	@RequestMapping(value = "/getPendingLossReportLocationPM", method = RequestMethod.GET)
-	public String getPendingLossReportLocation(@RequestParam(value = "month") Integer month,
-			@RequestParam(value = "year") Integer year,ModelMap modelMap) {
-		modelMap.addAttribute("pendingLocList", substationDataService.getPendingLocations(null,month,year));
-		modelMap.addAttribute("monthOfReport",DateUtil.convertMonthYearToDate(month, year) );
-		return "pendingLossMetersDetail";
-	}
+
 
 
 	
@@ -111,10 +104,8 @@ public class SubstationDataController {
 		modelMap.addAttribute("fileModel", uploadingService.processMultiZipUploadedFile(fileModel));
 
 		modelMap.addAttribute("currentUser", substationDataService.getLoggedInUser());
-		//	modelMap.addAttribute("energyMeters", substationDataService.listMeters(null));
-		//	modelMap.addAttribute("ssMeterLocations", substationDataService.getSubstationMeterFilesList(null));
 		return "substationHome";
-		// return "uploadedFilesDetail";
+		
 	}
 
 	@RequestMapping(value = "/approveRepoFile-{id}", method = RequestMethod.GET)

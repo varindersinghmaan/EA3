@@ -15,6 +15,12 @@
 
 <script
 	src="${pageContext.servletContext.contextPath}/static/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 
 
 
@@ -30,11 +36,11 @@
 
 
 <link
-	href="<c:url value='/static/css/datepicker.min.css?vol=2511811.211' />"
+	href="<c:url value='/static/css/datepicker.min.css?vol=2019.211' />"
 	rel="stylesheet" type="text/css" media="all" />
 
 <link
-	href="<c:url value='/static/css/dataTables.bootstrap.min.css?vol=251181.2111' />"
+	href="<c:url value='/static/css/dataTables.bootstrap.min.css?vol=2019251181.2111' />"
 	rel="stylesheet" type="text/css" media="all" />
 	
 	<link
@@ -43,25 +49,20 @@
 
 
 <link
-	href="<c:url value='/static/css/bootstrap.min.css?vol=251181.2111' />"
+	href="<c:url value='/static/css/bootstrap.min.css?vol=2019251181.2111' />"
 	rel="stylesheet"></link>
 
-<%-- <link href="<c:url value='/static/css/theme1.css?vol=18.12.18.13.59' />" --%>
+<%-- <link href="<c:url value='/static/css/theme1.css?vol=201918.12.18.13.59' />" --%>
 <!-- 	rel="stylesheet"></link> -->
 
-<link href="<c:url value='/static/css/app.css?vol=18.12.18.13.59' />"
+<link href="<c:url value='/static/css/app.css?vol=201918.12.18.13.59' />"
 	rel="stylesheet"></link>
 	
 	
 	
 
-<link href="<c:url value='/static/css/colors.css?vol=18.12.18.13.59' />"
+<link href="<c:url value='/static/css/colors.css?vol=201918.12.18.13.59' />"
 	rel="stylesheet"></link>
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-
-<!-- <link rel="stylesheet" -->
-<!-- 	href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" -->
-<!-- 	> -->
-
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" />
 

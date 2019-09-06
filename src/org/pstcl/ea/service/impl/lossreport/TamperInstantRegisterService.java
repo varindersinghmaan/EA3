@@ -1,5 +1,6 @@
 package org.pstcl.ea.service.impl.lossreport;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,11 +12,13 @@ import org.pstcl.ea.entity.meterTxnEntity.InstantRegisters;
 import org.pstcl.ea.model.LocationSurveyDataModel;
 import org.pstcl.ea.model.reporting.ReportParametersModel;
 import org.pstcl.ea.model.reporting.TamperDetailsProjectionEntity;
+import org.pstcl.ea.service.impl.DateServiceUtil;
 import org.pstcl.ea.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 @Service
-public class TamperInstantRegisterService {
+public class TamperInstantRegisterService extends DateServiceUtil {
 
 	@Autowired
 	ITamperLogDao tamperLogDao;
@@ -34,13 +37,14 @@ public class TamperInstantRegisterService {
 	 * @see org.pstcl.ea.service.impl.IlossReport#getIRDetails(java.lang.String, int, int)
 	 */
 
+
 	public InstantRegisters getIRDetails(String locationId,int month,int year){
 		InstantRegisters ir = instantRegistersDao.findInstantRegistersByDayAndLocation(locationId, month, year);
 		return ir;
 	}
 
 	public List<InstantRegisters> getIRDetailForMonth(Integer month,Integer year){
-		List<InstantRegisters> irList = instantRegistersDao.findAllByMonthAndLocation( month, year);
+		List<InstantRegisters> irList = instantRegistersDao.findAllByMonth( month, year);
 		return irList;
 	}
 
@@ -92,6 +96,23 @@ public class TamperInstantRegisterService {
 			locationSurveyDataModel.setTamperLogTransactions(tamperLogTransactionDao.getTamperLogTransactionsByMonth(null,month, year));
 		}
 		return locationSurveyDataModel;
+	}
+
+	public List<TamperDetailsProjectionEntity>  getTamperDetailsProjectionReport(ReportParametersModel parametersModel) {
+		// TODO Auto-generated method stub
+		return getTamperDetailsProjectionReport(parametersModel.getReportMonth(),parametersModel.getReportYear());
+	}
+
+	public List<InstantRegisters>  getIRDetail(ReportParametersModel parametersModel) {
+		// month for IR is the month in which the file was read from the meter. Thus for a loss report of JAN, IR will be read in early FEB. Thus date for IR should lie in FEB
+		//adding month to date for the same reason
+		Calendar calendar= Calendar.getInstance();
+		calendar.set(parametersModel.getReportYear(), parametersModel.getReportMonth(), 15);
+		calendar.add(Calendar.MONTH, 1);
+		Integer month=calendar.get(Calendar.MONTH);
+		Integer year=calendar.get(Calendar.YEAR);
+		
+		return getIRDetailForMonth(month,year);
 	}
 
 }

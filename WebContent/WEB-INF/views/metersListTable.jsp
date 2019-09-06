@@ -60,7 +60,7 @@
 						</div>
 						<div class="col-3">
 							<div class="app-title row">Meter Location</div>
-							<div class="sub-title row">Feeder:${meterObject.locationMaster.feederMaster.feederName}
+							<div class="sub-title row">Feeder:${meterObject.locationMaster.feederName}
 							</div>
 							<div class="sub-title row">Boundary
 								Type:${meterObject.locationMaster.boundaryTypeMaster.boundaryType}
@@ -137,7 +137,7 @@
 								<tr>
 									<th>Feeder Name</th>
 
-									<td>${meterObject.locationMaster.feederMaster.feederName}</td>
+									<td>${meterObject.locationMaster.feederName}</td>
 								</tr>
 
 								<tr>

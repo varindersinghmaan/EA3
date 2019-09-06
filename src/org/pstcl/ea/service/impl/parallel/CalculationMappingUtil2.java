@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
@@ -17,7 +17,7 @@ public class CalculationMappingUtil2 {
 		super();
 	}
 
-	public void setDailyTxnLocationAndMF(List<MeterLocationMap> mtrLocMapList, List<LocationMFMap> locationEMFList,  DailyTransaction dailyTransaction) {
+	public void setDailyTxnLocationAndMF(List<MapMeterLocation> mtrLocMapList, List<LocationMFMap> locationEMFList,  DailyTransaction dailyTransaction) {
 		//BLOCK STARTS
 
 
@@ -30,7 +30,7 @@ public class CalculationMappingUtil2 {
 			}
 			else if(mtrLocMapList.size()>1)
 			{
-				for (MeterLocationMap locationMap : mtrLocMapList) {
+				for (MapMeterLocation locationMap : mtrLocMapList) {
 					if(null!=locationMap.getEndDate()&&(locationMap.getEndDate().compareTo(dailyTransaction.getTransactionDate())>=0)&&(locationMap.getStartDate().compareTo(dailyTransaction.getTransactionDate())<=0))
 					{
 						dailyTransaction.setLocation(locationMap.getLocationMaster());
@@ -59,7 +59,7 @@ public class CalculationMappingUtil2 {
 			}
 			else if(mtrLocMapList.size()==1)
 			{
-				for (MeterLocationMap locationMap : mtrLocMapList) {
+				for (MapMeterLocation locationMap : mtrLocMapList) {
 					if(null!=locationMap.getEndDate()&&(locationMap.getEndDate().compareTo(dailyTransaction.getTransactionDate())>=0)&&(locationMap.getStartDate().compareTo(dailyTransaction.getTransactionDate())<=0))
 					{
 						dailyTransaction.setLocation(locationMap.getLocationMaster());

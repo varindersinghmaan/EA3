@@ -3,9 +3,47 @@
 
 	<Appenders>
 		<!-- Rolling File Appender -->
-		<RollingFile name="FileAppender"
-			fileName="logs/log4j2-demo.log"
+		<RollingFile name="fileLogger"
+			fileName="../logs/log4j2-demo.log"
 			filePattern="logs/log4j2-demo-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+
+
+
+		<!-- Rolling File Appender -->
+		<RollingFile name="dailyTxnFileLogger"
+			fileName="../logs/dailyTxnFileLog.log"
+			filePattern="logs/dailyTxnFileLog-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+		<RollingFile name="tampeLogFileLogger"
+			fileName="../logs/tampeLogFileLog.log"
+			filePattern="logs/tampeLogFileLog-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+
+		<RollingFile name="fileDetailsLogger"
+			fileName="../logs/fileDetailsLog.log"
+			filePattern="logs/fileDetailsLog-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout>
 				<Pattern>${LOG_PATTERN}</Pattern>
 			</PatternLayout>
@@ -24,15 +62,13 @@
 		<!-- Log everything in hibernate -->
 		<Logger name="org.hibernate" level="error" additivity="false">
 			<AppenderRef ref="console" />
-			<!-- <AppenderRef ref="fileLogger" /> -->
+			<AppenderRef ref="fileLogger" />
 		</Logger>
 
 		<!-- Log SQL statements -->
 		<Logger name="org.hibernate.SQL" level="error"
 			additivity="false">
 			<AppenderRef ref="console" />
-
-
 		</Logger>
 
 		<!-- Log JDBC bind parameters -->
@@ -45,10 +81,24 @@
 		</Logger>
 
 		<!-- Log custom packages -->
-
 		<Logger name="org.pstcl" level="error" additivity="true">
 			<appender-ref ref="fileLogger" level="error" />
 		</Logger>
+		<Logger name="DailyTransactionFileLogger" level="info"
+			additivity="false">
+			<appender-ref ref="dailyTxnFileLogger" level="error" />
+		</Logger>
+
+		<Logger name="TampeLogFileLogger" level="info"
+			additivity="false">
+			<appender-ref ref="tampeLogFileLogger" level="error" />
+		</Logger>
+		<Logger name="FileDetailsLogger" level="info"
+			additivity="false">
+			<appender-ref ref="fileDetailsLogger" level="error" />
+		</Logger>
+
+
 
 		<Root level="error" additivity="false">
 			<appender-ref ref="console" />

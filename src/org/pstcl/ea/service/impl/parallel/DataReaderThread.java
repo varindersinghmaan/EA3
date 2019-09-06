@@ -9,12 +9,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.tools.DocumentationTool.Location;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.pstcl.ea.dao.IDailyTransactionDao;
@@ -25,23 +23,28 @@ import org.pstcl.ea.dao.ILocationEMFDao;
 import org.pstcl.ea.dao.ILocationMasterDao;
 import org.pstcl.ea.dao.IMeterMasterDao;
 import org.pstcl.ea.dao.ITamperLogDao;
-import org.pstcl.ea.dao.MeterLocationMapDao;
+import org.pstcl.ea.dao.MapMeterLocationDao;
 import org.pstcl.ea.entity.EAUser;
 import org.pstcl.ea.entity.FileMaster;
 import org.pstcl.ea.entity.LocationMaster;
 import org.pstcl.ea.entity.mapping.LocationMFMap;
-import org.pstcl.ea.entity.mapping.MeterLocationMap;
+import org.pstcl.ea.entity.mapping.MapMeterLocation;
 import org.pstcl.ea.entity.meterTxnEntity.DailyTransaction;
 import org.pstcl.ea.entity.meterTxnEntity.InstantRegisters;
 import org.pstcl.ea.entity.meterTxnEntity.TamperLogTransaction;
 import org.pstcl.ea.entity.meterTxnEntity.jpa.LoadSurveyTransaction;
+import org.pstcl.ea.messaging.OutputMessage;
 import org.pstcl.ea.model.CMRIFileDataModel;
 import org.pstcl.ea.util.DateUtil;
 import org.pstcl.ea.util.EAUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.HtmlUtils;
 
 @Component
 @Scope("prototype")
@@ -50,6 +53,9 @@ public class DataReaderThread extends CalculationMappingUtil {
 	//added
 	@Autowired
 	protected IInstantRegistersDao instantRegistersDao;
+
+	static final Logger dailyLogger = LoggerFactory.getLogger("DailyTransactionFileLogger");
+	static final Logger tamperlogger = LoggerFactory.getLogger("TampeLogFileLogger");
 
 
 
@@ -189,7 +195,9 @@ public class DataReaderThread extends CalculationMappingUtil {
 					|| instantRegisterLineJustFetched.contains("TAMPER_LOG")
 					|| instantRegisterLineJustFetched.contains("METER_INFO")) {
 				if(transactionDate==null)
+				{
 					transactionDate = new Date();
+				}
 				InstantRegisters register = new InstantRegisters(null,cmriFileDataModel.getFileMaster().getMeterMaster(), transactionDate, phaseAVoltage, phaseBVoltage, phaseCVoltage,
 						phaseACurrent, phaseBCurrent, phaseCCurrent, phaseAVoltAngle, phaseBVoltAngle, phaseCVoltAngle,
 						phaseACurrentAngle, phaseBCurrentAngle, phaseCCurrentAngle, threePhasePF, frequency, activePowerA,
@@ -233,7 +241,7 @@ public class DataReaderThread extends CalculationMappingUtil {
 				//date in file is always of next month. therefore the daily survey start date is 45 days lesser and the effective date is 2nd of previous month
 				//Thus all mappings after 2nd of month befre the file generation are required to find meter location mappings
 				Date effectiveDate= DateUtil.startDateTimeForDailyFromFileDate(fileDetails.getTransactionDate());
-				List<MeterLocationMap> mtrLocMapList =  mtrLocMappingDao.getLocationByMeterAndDate(fileDetails.getMeterMaster(),effectiveDate);
+				List<MapMeterLocation> mtrLocMapList =  mtrLocMappingDao.getLocationByMeterAndDate(fileDetails.getMeterMaster(),effectiveDate);
 
 
 				setTransactionLocationFromMeter(mtrLocMapList, register);
@@ -549,7 +557,7 @@ public class DataReaderThread extends CalculationMappingUtil {
 	// }
 
 	@Autowired
-	protected MeterLocationMapDao mtrLocMappingDao;
+	protected MapMeterLocationDao mtrLocMappingDao;
 
 	@Autowired
 	protected ILocationEMFDao locEmfDao;
@@ -682,7 +690,7 @@ public class DataReaderThread extends CalculationMappingUtil {
 			FileMaster fileDetails = cmriFileDataModel.getFileMaster();
 
 			Date startDateOfMonth=		DateUtil.startDateTimeForDailyFromFileDate(fileDetails.getTransactionDate());
-			List<MeterLocationMap> mtrLocMapList =  mtrLocMappingDao.getLocationByMeterAndDate(fileDetails.getMeterMaster(),startDateOfMonth);
+			List<MapMeterLocation> mtrLocMapList =  mtrLocMappingDao.getLocationByMeterAndDate(fileDetails.getMeterMaster(),startDateOfMonth);
 
 			List<LocationMFMap> locationEMFList=locEmfDao.findLocationEmfByLocAndDate(mtrLocMapList, startDateOfMonth); 
 
@@ -732,6 +740,9 @@ public class DataReaderThread extends CalculationMappingUtil {
 							cmriFileDataModel.setDailyTransactions(dailyTransactions);
 							// dailyTransactionDao.save(dailyTransactions, getLoggedInUser());
 
+							String msg=cmriFileDataModel.getDailyTransactions().size() +" Daily Survey Records in file "+fileDetails.getUserfileName();
+							this.template.convertAndSend("/topic/greetings",new OutputMessage(HtmlUtils.htmlEscape(msg)) );
+							dailyLogger.info(msg);
 							return dailySurveylineJustFetched;
 						} else {
 
@@ -809,7 +820,7 @@ public class DataReaderThread extends CalculationMappingUtil {
 			FileMaster fileDetails = cmriFileDataModel.getFileMaster();
 
 			Date effectiveDate= DateUtil.startDateTimeForDailyFromFileDate(fileDetails.getTransactionDate());
-			List<MeterLocationMap> mtrLocMapList =  mtrLocMappingDao.getLocationByMeterAndDate(fileDetails.getMeterMaster(),effectiveDate);
+			List<MapMeterLocation> mtrLocMapList =  mtrLocMappingDao.getLocationByMeterAndDate(fileDetails.getMeterMaster(),effectiveDate);
 
 			String fileName = FilenameUtils.getBaseName(fileToRead.getName());
 
@@ -902,84 +913,86 @@ public class DataReaderThread extends CalculationMappingUtil {
 							cmriFileDataModel.setTamperLogs(tamperLogList);
 							// loadSurveyTransactionDao.save(loadSurveyList, getLoggedInUser());
 
+							String msg="Tamper logs in file "+fileDetails.getTxtfileName()+":"+ tamperLogList.size();
+							tamperlogger.info(msg);
+							this.template.convertAndSend("/topic/fileUploadingStatus",new OutputMessage(HtmlUtils.htmlEscape(msg)) );
+
+
 							return tamperLogRecordJustFetched;
 						} else {
 
-							String[] tamperLogRecord = tamperLogRecordJustFetched.split("\t");
-							if (StringUtils.isNumeric(tamperLogRecord[0]) && tamperLogRecord[0].length() > 0) {
-								// q1varhTotal = new
-								// BigDecimal(loadSurveyRecord[indexOfLoadSurveyQ1varhTotal].trim());
-								//						
-								//						Date transactionDate=null;
-								//						String recordStatus = null, tamperType = null, tamperDuration=null;
-								//						BigDecimal voltageRed = null;
-								//						BigDecimal voltageYellow = null;
-								//						BigDecimal voltageBlue = null;
-								//						BigDecimal currentRed = null;
-								//						BigDecimal currentYellow = null;
-								//						BigDecimal currentBlue = null;
-								//						BigDecimal impWh = null;
-								//						BigDecimal expWh = null;
-								//						Integer recordNo=null;
-								//						Long tamperCount=null;
+							try {
+								String[] tamperLogRecord = tamperLogRecordJustFetched.split("\t");
+								if (StringUtils.isNumeric(tamperLogRecord[0]) && tamperLogRecord[0].length() > 0) {
 
-								transactionDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-										.parse(tamperLogRecord[indexOfTamperLogDateTime]);
-								recordNo = Integer.parseInt(tamperLogRecord[indexOfTamperLogRecordNo]);
-								tamperCount = Long.parseLong(tamperLogRecord[indexOfTamperLogCount]);
 
-								voltageBlue = new BigDecimal(tamperLogRecord[indexOfTamperLogVolageBlue].trim());
-								voltageRed = new BigDecimal(tamperLogRecord[indexOfTamperLogVoltageRed].trim());
-								voltageYellow = new BigDecimal(tamperLogRecord[indexOfTamperLogVoltageYellow].trim());
+									transactionDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+											.parse(tamperLogRecord[indexOfTamperLogDateTime]);
+									recordNo = Integer.parseInt(tamperLogRecord[indexOfTamperLogRecordNo]);
+									tamperCount = Long.parseLong(tamperLogRecord[indexOfTamperLogCount]);
 
-								currentBlue = new BigDecimal(tamperLogRecord[indexOfTamperLogCurrentBlue].trim());
-								currentRed = new BigDecimal(tamperLogRecord[indexOfTamperLogCurrentRed].trim());
-								currentYellow = new BigDecimal(tamperLogRecord[indexOfTamperLogCurrentYellow].trim());
+									voltageBlue = new BigDecimal(tamperLogRecord[indexOfTamperLogVolageBlue].trim());
+									voltageRed = new BigDecimal(tamperLogRecord[indexOfTamperLogVoltageRed].trim());
+									voltageYellow = new BigDecimal(tamperLogRecord[indexOfTamperLogVoltageYellow].trim());
 
-								impWh = new BigDecimal(tamperLogRecord[indexOfTamperLogImpWh].trim());
-								expWh= new BigDecimal(tamperLogRecord[indexOfTamperLogExpWh].trim());
+									currentBlue = new BigDecimal(tamperLogRecord[indexOfTamperLogCurrentBlue].trim());
+									currentRed = new BigDecimal(tamperLogRecord[indexOfTamperLogCurrentRed].trim());
+									currentYellow = new BigDecimal(tamperLogRecord[indexOfTamperLogCurrentYellow].trim());
+
+									impWh = new BigDecimal(tamperLogRecord[indexOfTamperLogImpWh].trim());
+									expWh= new BigDecimal(tamperLogRecord[indexOfTamperLogExpWh].trim());
 
 
 
 
-								recordStatus = tamperLogRecord[indexOfTamperLogRecordStatus].trim();
-								tamperType = tamperLogRecord[indexOfTamperLogType].trim();
-								tamperDuration=tamperLogRecord[indexOfTamperLogDuration].trim();
+									recordStatus = tamperLogRecord[indexOfTamperLogRecordStatus].trim();
+									tamperType = tamperLogRecord[indexOfTamperLogType].trim();
+									tamperDuration=tamperLogRecord[indexOfTamperLogDuration].trim();
 
 
 
 
-								TamperLogTransaction tamperLogTransaction = new TamperLogTransaction(null,fileDetails.getMeterMaster(),
-										fileName, voltageRed, voltageYellow, voltageBlue, currentRed, currentYellow,
-										currentBlue, impWh, expWh, recordNo, recordStatus, tamperType, tamperDuration,
-										tamperCount, transactionDate);
+									TamperLogTransaction tamperLogTransaction = new TamperLogTransaction(null,fileDetails.getMeterMaster(),
+											fileName, voltageRed, voltageYellow, voltageBlue, currentRed, currentYellow,
+											currentBlue, impWh, expWh, recordNo, recordStatus, tamperType, tamperDuration,
+											tamperCount, transactionDate);
 
-								if (tamperLogTransaction != null) {
-									if (isLoadSurveyTransactionInTheMonth(tamperLogTransaction.getTransactionDate(),
-											fileDetails.getTransactionDate())) {
+									if (tamperLogTransaction != null) {
+										if (isLoadSurveyTransactionInTheMonth(tamperLogTransaction.getTransactionDate(),
+												fileDetails.getTransactionDate())) {
 
-										//setting date equal to months daily start date to find mappings for the meters and locations. i.e. will find all mappings that were changes after 2nd of the month.
-										//date in file is always of next month. therefore the daily survey start date is 45 days lesser and the effective date is 2nd of previous month
-										//Thus all mappings after 2nd of month befre the file generation are required to find meter location mappings
-
-
-
-										setTransactionLocationFromMeter(mtrLocMapList, tamperLogTransaction);
+											//setting date equal to months daily start date to find mappings for the meters and locations. i.e. will find all mappings that were changes after 2nd of the month.
+											//date in file is always of next month. therefore the daily survey start date is 45 days lesser and the effective date is 2nd of previous month
+											//Thus all mappings after 2nd of month befre the file generation are required to find meter location mappings
 
 
-										tamperLogList.add(tamperLogTransaction);
+
+											setTransactionLocationFromMeter(mtrLocMapList, tamperLogTransaction);
+
+
+											tamperLogList.add(tamperLogTransaction);
+										}
 									}
 								}
 							}
-						}
+							catch(Exception exception)
+							{
+								tamperlogger.error("Tamper reading ERROR "+exception.getMessage()+"\n ERROR FILE"+fileDetails.getTxtfileName());
 
+							}
+						}
 					}
 
 				}
 
 			}
+
+
 		}catch(Exception e)
 		{
+			//e.printStackTrace();
+			tamperlogger.error("Tamper reading ERROR "+e.getMessage()+"\n ERROR FILE"+fileToRead.getAbsolutePath());
+
 			e.printStackTrace();
 		}
 		return null;
@@ -1045,8 +1058,7 @@ public class DataReaderThread extends CalculationMappingUtil {
 				// System.out.println(loadSurveyRecord);
 
 				fileDetails.setSurveyRecordNoEnd(recordNo);
-				e.printStackTrace();
-				System.out.println(e.getMessage());
+
 				return new LoadSurveyTransaction(fileName,fileDetails.getMeterMaster(), transactionDate, recordNo,
 						importWhFundTotal, exportWhFundTotal, avgFrequency, q1varhTotal, q2varhTotal, q3varhTotal,
 						q4varhTotal, netWh, freqcode, importVAhTotal, exportVAhTotal, importWhTotal, exportWhTotal,
@@ -1210,7 +1222,7 @@ public class DataReaderThread extends CalculationMappingUtil {
 					fileDetails.setProcessingStatus(EAUtil.FILE_ERROR_METER_NOT_FOUND);
 				} else {
 
-					List<MeterLocationMap> meterLocList=mtrLocMappingDao.findLocations(fileDetails.getMeterMaster());
+					List<MapMeterLocation> meterLocList=mtrLocMappingDao.getLocationByMeterAndDate(fileDetails.getMeterMaster(),null);
 					setFileLocationFromMeter(meterLocList, fileDetails);
 
 				}
@@ -1223,12 +1235,21 @@ public class DataReaderThread extends CalculationMappingUtil {
 		return fileDetails;
 	}
 
+	@Autowired
+	private SimpMessagingTemplate template;
+
+
 	public CMRIFileDataModel extractTransactionDataFromFile(CMRIFileDataModel cmriFileDataModel) {
 
 		FileMaster fileDetails = cmriFileDataModel.getFileMaster();
+		this.template.convertAndSend("/topic/greetings", new OutputMessage(HtmlUtils.htmlEscape("File " + fileDetails.getUserfileName()+"dated"+fileDetails.getTransactionDate() + " started processing!")));
+
 		if ((fileDetails.getProcessingStatus().equals(EAUtil.FILE_ZIP_EXTRACTED)||
-				(fileDetails.getProcessingStatus().equals(EAUtil.FILE_UNDER_PROCESSING))||
-				 fileDetails.getProcessingStatus().equals(EAUtil.FILE_TXT_PROCESSED))) {
+				fileDetails.getProcessingStatus().equals(EAUtil.FILE_TXT_PROCESSED))) {
+			//set file status to processing to stop user from processing same file again and again
+			fileDetails.setProcessingStatus(EAUtil.FILE_UNDER_PROCESSING);
+			saveFileDetails(fileDetails);
+
 
 			if (null != fileDetails.getTxtfileName()) {
 
@@ -1334,6 +1355,11 @@ public class DataReaderThread extends CalculationMappingUtil {
 				return cmriFileDataModel;
 			}
 		}
+
+		this.template.convertAndSend("/topic/greetings", new OutputMessage(HtmlUtils.htmlEscape("File " + fileDetails.getUserfileName()+"dated"+fileDetails.getTransactionDate() + " ended processing!")));
+
+		//		 this.template.convertAndSend("/topic/greetings", new OutputMessage("File " + HtmlUtils.htmlEscape(fileDetails.getUserfileName()) + " ended processing!"));
+
 		return cmriFileDataModel;
 	}
 
@@ -1379,25 +1405,57 @@ public class DataReaderThread extends CalculationMappingUtil {
 
 
 	public void saveLoadDailyFileDataToDB(CMRIFileDataModel cmriFileDataModel) {
+		String msg="";
+		String filename="";
 		if (cmriFileDataModel.getFileMaster().getFileActionStatus().equals(EAUtil.FILE_ACTION__APPROVED_AE)
 				) {
+			filename=cmriFileDataModel.getFileMaster().getUserfileName();
+			msg="File:"+filename;
+			this.template.convertAndSend("/topic/greetings",new OutputMessage(HtmlUtils.htmlEscape(msg)) );
+
 			try {
 
 
-				dailyTransactionDao.save(cmriFileDataModel.getDailyTransactions(), getLoggedInUser());
+				if(CollectionUtils.isNotEmpty(cmriFileDataModel.getDailyTransactions()))
+				{
 
-				loadSurveyTransactionDao.save(cmriFileDataModel.getLoadSurveyTransactions(), getLoggedInUser());
 
 
-				tamperLogDao.save(cmriFileDataModel.getTamperLogs(), getLoggedInUser());
+					msg=cmriFileDataModel.getDailyTransactions().size() +" Daily Survey Records in file "+filename;
+					this.template.convertAndSend("/topic/greetings",new OutputMessage(HtmlUtils.htmlEscape(msg)) );
 
-				instantRegistersDao.save(cmriFileDataModel.getInstantRegistersDetails(), getLoggedInUser());
-				saveFileDetails(cmriFileDataModel.getFileMaster());
+					dailyTransactionDao.save(cmriFileDataModel.getDailyTransactions(), getLoggedInUser());
+				}
+				if(CollectionUtils.isNotEmpty(cmriFileDataModel.getLoadSurveyTransactions()))
+				{
+					msg=cmriFileDataModel.getLoadSurveyTransactions().size() +" Load Survey Records in file" +filename;
+					this.template.convertAndSend("/topic/greetings",new OutputMessage(HtmlUtils.htmlEscape(msg)) );
 
+					loadSurveyTransactionDao.save(cmriFileDataModel.getLoadSurveyTransactions(), getLoggedInUser());
+				}
+				if(CollectionUtils.isNotEmpty(cmriFileDataModel.getTamperLogs()))
+				{
+					msg=cmriFileDataModel.getTamperLogs().size() +" Tamper Records in file" +filename;
+					this.template.convertAndSend("/topic/greetings",new OutputMessage(HtmlUtils.htmlEscape(msg)) );
+
+					tamperLogDao.save(cmriFileDataModel.getTamperLogs(), getLoggedInUser());
+				}
+				if(null!=cmriFileDataModel.getInstantRegistersDetails())
+				{
+
+					instantRegistersDao.save(cmriFileDataModel.getInstantRegistersDetails(), getLoggedInUser());
+				}
+				if(null!=cmriFileDataModel.getFileMaster())
+				{
+					saveFileDetails(cmriFileDataModel.getFileMaster());
+				}
 
 
 			}catch(Exception e)
 			{
+				msg="Error occured while saving file data for: "+cmriFileDataModel.getFileMaster().getUserfileName();
+				this.template.convertAndSend("/topic/greetings",new OutputMessage(HtmlUtils.htmlEscape(msg)) );
+
 				e.printStackTrace();
 				cmriFileDataModel.getFileMaster().setProcessingStatus(EAUtil.FILE_ERROR_WHILE_SAVING_DATA);
 				saveFileDetails(cmriFileDataModel.getFileMaster());
@@ -1407,6 +1465,7 @@ public class DataReaderThread extends CalculationMappingUtil {
 			saveFileDetails(cmriFileDataModel.getFileMaster());
 			// fileMasterDao.update(cmriFileDataModel.getFileMaster(), getLoggedInUser());
 		}
+
 	}
 
 
