@@ -87,17 +87,17 @@
 					</c:choose>
 					<td><c:if test="${ lossReportEntity.location != null}">
 
-							<a
-								href="javascript:window.location='getReportTransactions-${lossReportEntity.location.locationId}?month=${monthOfReport}&year=${yearOfReport}'">
+							<a  target="_blank" 
+								href="getReportTransactions-${lossReportEntity.location.locationId}?month=${monthOfReport}&year=${yearOfReport}">
 
 								${lossReportEntity.location.locationId} </a>
-							<a
-								href="javascript:window.location='getLocationTampers-${lossReportEntity.location.locationId}?month=${monthOfReport}&year=${yearOfReport}'">
+							<a  target="_blank" 
+								href="getLocationTampers-${lossReportEntity.location.locationId}?month=${monthOfReport}&year=${yearOfReport}">
 
 								(Tamper Log) </a>
 <br>
-							<a
-								href="javascript:window.location='locationHome-${lossReportEntity.location.locationId}'">
+							<a  target="_blank" 
+								href="locationHome-${lossReportEntity.location.locationId}">
 
 								Location Details</a>
 

@@ -139,7 +139,7 @@
 			<div class="card">
 				<div class="card-header  app-title">
 				
-				<span class="lead">File already uploaded <c:if
+				<span class="lead">Files already uploaded <c:if
 				test="${not empty reportMonthYearDate}">in the month of <fmt:formatDate
 					value="${reportMonthYearDate}" pattern="MMM,yyyy" />
 			</c:if></span></div>
@@ -152,12 +152,9 @@
 								<tr>
 									<th>Sr. No.</th>
 
-									<th>Meter Sr. No.</th>
-									<th>Meter Type/Make</th>
+									
 									<th>Location ID</th>
-									<th>Boundary Type</th>
-
-									<th style="width: 150px;">Meter Location</th>
+																	<th style="width: 150px;">Meter Location</th>
 									<th>Boundary</th>
 
 									<th style="width: 350px;"></th>
@@ -171,12 +168,9 @@
 
 
 
-										<td>${locDetails.locationMaster.meterMaster.meterSrNo}</td>
-										<td>${locDetails.locationMaster.meterMaster.meterType}</td>
+										
 										<td>${locDetails.locationMaster.locationId}</td>
-										<td>${locDetails.locationMaster.boundaryTypeMaster.boundaryType}</td>
-
-
+									
 										<td>${locDetails.locationMaster.feederName}</td>
 										<td>${locDetails.locationMaster.boundaryTypeMaster.boundaryType}</td>
 
@@ -204,6 +198,7 @@
 															<th>Date of Uploading</th>
 															<th>No. of Daily(24 hr) Records</th>
 															<th>No. of Load Survey(15 min) Records in File</th>
+															
 															<th>Uploaded By</th>
 															<th>Approved By</th>
 															<th>ProcessingStatus</th>

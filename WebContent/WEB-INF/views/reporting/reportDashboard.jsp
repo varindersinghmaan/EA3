@@ -176,9 +176,7 @@
 
 			<div class="float-right">
 				<input type="button" onclick="loadReport()" id="loadReportButton"
-					value="Load Report" class="btn btn-primary btn-sm" /> <input
-					type="button" onclick="downloadExlReport()"
-					value="Download as Excel" class="btn btn-primary btn-sm" /> <a
+					value="Load Report" class="btn btn-primary btn-sm" /> <a
 					class="btn btn-light btn-sm float-right"
 					href="javascript:window.location='reportDashboard'"><span
 					class="glyphicon glyphicon-plus"></span>Clear</a>

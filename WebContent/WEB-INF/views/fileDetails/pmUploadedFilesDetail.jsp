@@ -105,7 +105,7 @@
 							pattern="dd/MM/yyyy HH:mm:ss" /></td>
 
 					<td>${fileDetails.userfileName }</td>
-					<td>${fileDetails.uploadedBy }</td>
+					<td>${fileDetails.uploadedBy.userNameLabel }</td>
 					
 					
 				</c:forEach>

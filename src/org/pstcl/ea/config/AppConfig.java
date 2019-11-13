@@ -77,8 +77,9 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	
 	}
 
+	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-		registry.addResourceHandler(new String[]{"/static/**"}).addResourceLocations(new String[]{"/static/","/static/js/"})
+		registry.addResourceHandler(new String[]{"/static/**"}).addResourceLocations(new String[]{"/static/","/static/js/","/static/css/"})
 		.setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS));
 	}
 

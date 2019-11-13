@@ -79,9 +79,10 @@
 					<th>No. of Daily(24 hr) Records</th>
 					<th>No. of Load Survey(15 min) Records in File</th>
 
-
+<th>FileName</th>
+<th>Uploaded by</th>
 					<th>Actions</th>
-					<th>FileName</th>
+					
 				</tr>
 				<c:forEach items="${fileModel.filesUploadedDetail}"
 					var="fileDetails" varStatus="indexStatus">
@@ -108,9 +109,11 @@
 					<td>${fileDetails.dailyRecordCount}</td>
 					<td>${fileDetails.surveyRecordCount}</td>
 
+					<td>${fileDetails.userfileName }</td>
+										<td>${fileDetails.uploadedBy.userNameLabel }</td>
 					<td><%@include file="fileDetailsActionSnippet.jsp"%>
 					</td>
-					<td>${fileDetails.userfileName }</td>
+
 				</c:forEach>
 			</table>
 

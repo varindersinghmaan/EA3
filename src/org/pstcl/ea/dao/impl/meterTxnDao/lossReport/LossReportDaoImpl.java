@@ -82,7 +82,7 @@ public class LossReportDaoImpl implements ILossReportDao {
 
 		criteria.add(Restrictions.ge("transactionDate",startDate));
 		criteria.add(Restrictions.le("transactionDate",endDate));
-		criteria.add(Restrictions.eq("transactionStatus", EAUtil.DAILY_TRANSACTION_ADDED_MANUALLY));
+		criteria.add(Restrictions.ge("transactionStatus", EAUtil.DAILY_TRANSACTION_ADDED_MANUALLY));
 
 		@SuppressWarnings("unchecked")
 		List<LocationMaster> results = criteria

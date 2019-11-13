@@ -31,7 +31,8 @@
 			});
 		});
 
-		stompClient2 = Stomp.over(socket);
+		var socket2 = new SockJS('${ctx}/gs-guide-websocket');
+		stompClient2 = Stomp.over(socket2);
 		stompClient2.connect({}, function(frame) {
 			setConnected(true);
 			console.log('Connected: ' + frame);

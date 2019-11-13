@@ -1,10 +1,7 @@
 package org.pstcl.ea.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
-import org.pstcl.ea.entity.mapping.MapMonthLossReportLocation;
 import org.pstcl.ea.model.FileModel;
 import org.pstcl.ea.model.reporting.FileParameterModel;
 import org.pstcl.ea.model.reporting.ReportParametersModel;
@@ -168,7 +165,7 @@ public class FilesController {
 	@RequestMapping(value = "/processRepoFile-{id}", method = RequestMethod.GET)
 	public String uploadFile(@PathVariable Integer id,ModelMap modelMap) {
 		modelMap.addAttribute("cmriModel", dataService.processRepoFileSerial(id));
-		return "processingFilesStatus";
+		return "fileDetails/filesDashboard";
 	}
 
 
