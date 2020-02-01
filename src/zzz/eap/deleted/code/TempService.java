@@ -1,4 +1,4 @@
-package org.pstcl.ea.service.impl;
+package zzz.eap.deleted.code;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class TempService {
 
 	@Autowired

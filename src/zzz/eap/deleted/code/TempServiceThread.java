@@ -1,4 +1,4 @@
-package org.pstcl.ea.service.impl;
+package zzz.eap.deleted.code;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ibm.icu.math.BigDecimal;
-@Component
-@Scope("prototype")
+//@Component
+//@Scope("prototype")
 
 public class TempServiceThread {
 	@Autowired

@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled=true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
 	@Autowired
 	@Qualifier("customUserDetailsService")
 	UserDetailsService userDetailsService;
